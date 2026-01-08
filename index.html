@@ -65,7 +65,7 @@
             background: linear-gradient(45deg, #E50914, #ff4b1f);
         }
 
-        /* Navigation Links (Desktop) */
+        /* Navigation Links */
         .nav-link {
             cursor: pointer;
             padding: 0.5rem 1rem;
@@ -81,7 +81,7 @@
             font-weight: 700;
         }
 
-        /* Bottom Navigation (Mobile) */
+        /* Bottom Navigation */
         .bottom-nav-item {
             color: #666;
             transition: all 0.3s ease;
@@ -103,7 +103,7 @@
             transform: rotate(180deg);
         }
 
-        /* App Card Hover */
+        /* App Card */
         .app-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background-color: var(--dark-gray);
@@ -115,7 +115,7 @@
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3);
         }
 
-        /* Slideshow Styles */
+        /* Slideshow */
         .slide-image {
             position: absolute;
             top: 0;
@@ -166,7 +166,7 @@
         ::-webkit-scrollbar-track { background: #111; }
         ::-webkit-scrollbar-thumb { background: #E50914; border-radius: 4px; }
 
-        /* --- LOGIN SLIDING TABS --- */
+        /* Login Tabs */
         .auth-tabs {
             display: flex;
             position: relative;
@@ -196,7 +196,7 @@
             box-shadow: 0 -2px 10px rgba(229, 9, 20, 0.8);
         }
 
-        /* --- CHAT WIDGET STYLES --- */
+        /* Chat Widget */
         .chat-widget-btn {
             position: fixed;
             bottom: 90px;
@@ -314,7 +314,7 @@
             border-radius: 50%;
         }
 
-        /* --- NOTIFICATION MODAL SYSTEM --- */
+        /* Notifications */
         .notif-backdrop {
             position: fixed;
             top: 0;
@@ -369,10 +369,10 @@
         .notif-close:hover {
             background: var(--primary-red);
         }
-        .aspect-16-9 {
-            aspect-ratio: 16/9;
+        .notif-img-display {
             width: 100%;
-            object-fit: cover;
+            max-height: 250px;
+            object-fit: contain; 
             display: block;
             background-color: #000;
         }
@@ -463,9 +463,9 @@
         </div>
     </nav>
 
-    <!-- NOTIFICATION MODAL OVERLAY -->
+    <!-- NOTIFICATION MODAL OVERLAY (USER VIEW) -->
     <div id="notificationModal" class="notif-backdrop" onclick="closeNotificationModal(event)">
-        <div class="notif-box" onclick="event.stopPropagation()"> <!-- Stop click from closing when clicking inside box -->
+        <div class="notif-box" onclick="event.stopPropagation()">
             <div class="notif-close" onclick="closeNotificationModal(event)"><i class="fas fa-times"></i></div>
             
             <!-- Dynamic Content -->
@@ -500,6 +500,7 @@
                 <div class="text-center mb-8 md:mb-10">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
                 </div>
+                <!-- OPTIMIZED LOADER -->
                 <div id="homeLoader" class="text-center py-10">
                     <i class="fas fa-circle-notch fa-spin text-red-600 text-4xl"></i>
                     <p class="mt-2 text-gray-500">Loading...</p>
@@ -750,7 +751,7 @@
                     <h3 class="text-lg font-bold text-white mb-4">Slideshow</h3>
                     <div class="mb-4">
                         <input type="file" id="slideUploadInput" class="w-full text-xs text-gray-400 mb-2" accept="image/*">
-                        <button onclick="uploadSlide()" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload</button>
+                        <button onclick="uploadSlide()" id="slideUploadBtn" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload</button>
                     </div>
                     <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto"></div>
                 </div>
@@ -766,24 +767,38 @@
                     </div>
                 </div>
 
-                <!-- 4. Notification Center (NEW) -->
+                <!-- 4. Notification Center (UPDATED: SEND + HISTORY) -->
                 <div class="lg:col-span-6 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold text-white"><i class="fas fa-bell text-red-600 mr-2"></i> Notification Center</h3>
-                        <button onclick="deleteNotification()" class="text-xs text-red-500 hover:text-white border border-red-900 px-2 py-1 rounded">Clear Alert</button>
                     </div>
-                    <form onsubmit="sendNotification(event)" class="space-y-4">
+                    
+                    <!-- Send/Edit Form -->
+                    <form onsubmit="handleNotificationSubmit(event)" class="space-y-4 mb-6 border-b border-gray-800 pb-6">
+                        <input type="hidden" id="editNotifId">
                         <div>
                             <label class="text-xs text-gray-400 block mb-1">Notification Text</label>
                             <textarea id="notifText" class="w-full p-2 rounded h-20" placeholder="Type message..."></textarea>
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 block mb-1">Image (16:9)</label>
+                            <label class="text-xs text-gray-400 block mb-1">Image (Optional, Any Size)</label>
                             <input type="file" id="notifImage" class="w-full text-xs text-gray-400" accept="image/*">
                         </div>
-                        <button type="submit" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200">SEND NOTIFICATION</button>
-                        <p class="text-[10px] text-gray-500">Will trigger a red dot on user headers.</p>
+                        <div class="flex gap-2">
+                            <button type="submit" id="notifSubmitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200 text-sm">SEND</button>
+                            <button type="button" onclick="resetNotifForm()" class="px-3 border border-gray-600 rounded text-white text-sm">Reset</button>
+                        </div>
+                        <p class="text-[10px] text-gray-500">Will trigger a red dot. Users see the latest alert.</p>
                     </form>
+
+                    <!-- History List -->
+                    <h4 class="text-sm font-bold text-gray-300 mb-2">Sent Notifications</h4>
+                    <div class="overflow-x-auto max-h-60 overflow-y-auto border border-gray-800 rounded">
+                        <table class="w-full text-left text-xs text-gray-400">
+                            <thead class="bg-gray-800"><tr><th class="p-2">Message</th><th class="p-2 text-right">Action</th></tr></thead>
+                            <tbody id="adminNotifTable"></tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- 5. Support (Full) -->
@@ -871,13 +886,13 @@
     <script>
         // 1. FIREBASE CONFIG
         const firebaseConfig = {
-            apiKey: "AIzaSyAUHUwmJVnW40FefXCpuxfREsnXNCHHxQU",
-            authDomain: "ai-chatbot-51f32.firebaseapp.com",
-            databaseURL: "https://ai-chatbot-51f32-default-rtdb.firebaseio.com",
-            projectId: "ai-chatbot-51f32",
-            storageBucket: "ai-chatbot-51f32.firebasestorage.app",
-            messagingSenderId: "617183685078",
-            appId: "1:617183685078:web:edcb7598cbaf82a7b8dc77"
+          apiKey: "AIzaSyBVAGHlCxVKRQPx34823j0O8UNEEqJqTpE",
+          authDomain: "official-website-56eaf.firebaseapp.com",
+          databaseURL: "https://official-website-56eaf-default-rtdb.firebaseio.com",
+          projectId: "official-website-56eaf",
+          storageBucket: "official-website-56eaf.firebasestorage.app",
+          messagingSenderId: "1031308197634",
+          appId: "1:1031308197634:web:7eb301b19df54da0724c1b"
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -888,11 +903,12 @@
         const ADMIN_EMAIL = "thepremanshu@gmail.com";
         let allApps = [];
         let allSlides = [];
+        let allNotifications = [];
         let slideInterval = null;
         let countdownInterval = null;
         let currentUserEmail = null;
         let currentAdminChatUser = null;
-        let currentNotification = null; // Store fetched notification
+        let currentNotification = null; 
         const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'profile', 'privacy', 'disclaimer'];
 
         // 3. INIT & NAVIGATION
@@ -901,30 +917,18 @@
             if(savedSection !== 'admin') navigateTo(savedSection, true); 
             fetchApps();
             fetchSlides();
-            initNotifications(); // START LISTENING FOR NOTIFICATIONS
+            initNotifications(); 
         };
 
         function navigateTo(sectionId, isInitialLoad = false) {
             if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
-            
-            // Handle Sections
-            sections.forEach(s => {
-                const el = document.getElementById(`section-${s}`);
-                if(el) el.classList.add('hidden-section');
-            });
-
-            // Desktop Nav
+            sections.forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.add('hidden-section'); });
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            const navLink = document.getElementById(`link-${sectionId}`);
-            if (navLink) navLink.classList.add('active');
-
-            // Mobile Bottom Nav
+            const navLink = document.getElementById(`link-${sectionId}`); if (navLink) navLink.classList.add('active');
             document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
             if(sectionId === 'home') document.getElementById('bn-home').classList.add('active');
             else if(sectionId === 'apps') document.getElementById('bn-apps').classList.add('active');
-            else if(['profile', 'login', 'admin', 'about', 'contact', 'privacy', 'disclaimer'].includes(sectionId)) {
-                document.getElementById('bn-profile').classList.add('active');
-            }
+            else if(['profile', 'login', 'admin', 'about', 'contact', 'privacy', 'disclaimer'].includes(sectionId)) document.getElementById('bn-profile').classList.add('active');
 
             if(window.innerWidth < 768 && ['about', 'contact', 'privacy', 'disclaimer'].includes(sectionId)) {
                 document.getElementById('section-profile').classList.remove('hidden-section');
@@ -932,201 +936,36 @@
                 document.querySelectorAll('.accordion-btn').forEach(b => { b.classList.remove('active'); });
                 const accBtn = document.querySelector(`button[onclick="toggleAccordion('acc-${sectionId}', this)"]`);
                 const accContent = document.getElementById(`acc-${sectionId}`);
-                if(accBtn && accContent) {
-                    accBtn.classList.add('active');
-                    accContent.style.maxHeight = accContent.scrollHeight + "px";
-                }
+                if(accBtn && accContent) { accBtn.classList.add('active'); accContent.style.maxHeight = accContent.scrollHeight + "px"; }
             } else {
-                const target = document.getElementById(`section-${sectionId}`);
-                if(target) target.classList.remove('hidden-section');
+                const target = document.getElementById(`section-${sectionId}`); if(target) target.classList.remove('hidden-section');
             }
             window.scrollTo(0, 0);
         }
 
-        function scrollToHomeApps() {
-            document.getElementById('homeAppsContainer').scrollIntoView({ behavior: 'smooth' });
-        }
-
+        function scrollToHomeApps() { document.getElementById('homeAppsContainer').scrollIntoView({ behavior: 'smooth' }); }
         function toggleAccordion(id, btn) {
-            const content = document.getElementById(id);
-            const isActive = btn.classList.contains('active');
+            const content = document.getElementById(id); const isActive = btn.classList.contains('active');
             document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = '0'; });
             document.querySelectorAll('.accordion-btn').forEach(b => { b.classList.remove('active'); });
-            if (!isActive) {
-                btn.classList.add('active');
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
+            if (!isActive) { btn.classList.add('active'); content.style.maxHeight = content.scrollHeight + "px"; }
         }
 
-        // ============================================
-        // NOTIFICATION LOGIC (NEW)
-        // ============================================
-        
-        // 1. Listen for changes in Firebase
-        function initNotifications() {
-            db.ref('system_notification').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.active) {
-                    currentNotification = data;
-                    checkIfSeen(data.timestamp);
-                } else {
-                    currentNotification = null;
-                    hideRedDots();
-                }
-            });
-        }
-
-        // 2. Check LocalStorage to see if already viewed
-        function checkIfSeen(timestamp) {
-            const lastSeenTime = localStorage.getItem('apnaAddaLastNotifTime');
-            // If saved time is less than current notification time, or no saved time
-            if (!lastSeenTime || parseInt(lastSeenTime) < timestamp) {
-                showRedDots();
-            } else {
-                hideRedDots();
-            }
-        }
-
-        function showRedDots() {
-            document.getElementById('desktopNotifDot').classList.remove('hidden');
-            document.getElementById('mobileNotifDot').classList.remove('hidden');
-        }
-
-        function hideRedDots() {
-            document.getElementById('desktopNotifDot').classList.add('hidden');
-            document.getElementById('mobileNotifDot').classList.add('hidden');
-        }
-
-        // 3. Open Modal
-        function openNotificationModal() {
-            if (!currentNotification) {
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'info',
-                    title: 'No new notifications',
-                    showConfirmButton: false,
-                    timer: 2000,
-                    background: '#1a1a1a',
-                    color: '#fff'
+        // --- IMAGE COMPRESSOR & BASE64 CONVERTER ---
+        // This function auto-resizes and compresses images to be under ~1MB
+        const compressAndConvertToBase64 = async (file) => {
+            // 1. If file is small (< 1MB), just standard conversion
+            if (file.size < 1024 * 1024) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(e);
+                    reader.readAsDataURL(file);
                 });
-                return;
             }
 
-            // Populate Modal
-            const imgContainer = document.getElementById('notifContentImage');
-            const textContainer = document.getElementById('notifContentText');
-            
-            imgContainer.innerHTML = '';
-            textContainer.innerHTML = '';
-
-            if (currentNotification.image) {
-                imgContainer.innerHTML = `<img src="${currentNotification.image}" class="aspect-16-9">`;
-            }
-            
-            if (currentNotification.text) {
-                textContainer.innerText = currentNotification.text;
-                textContainer.style.display = 'block';
-            } else {
-                textContainer.style.display = 'none';
-            }
-
-            // Show Modal
-            document.getElementById('notificationModal').classList.add('open');
-
-            // Mark as seen
-            localStorage.setItem('apnaAddaLastNotifTime', currentNotification.timestamp);
-            hideRedDots();
-        }
-
-        // 4. Close Modal
-        function closeNotificationModal(e) {
-            document.getElementById('notificationModal').classList.remove('open');
-        }
-
-        // 5. Admin: Send Notification
-        async function sendNotification(e) {
-            e.preventDefault();
-            const text = document.getElementById('notifText').value.trim();
-            const file = document.getElementById('notifImage').files[0];
-
-            if (!text && !file) {
-                showToast('Please add text or an image.', 'warning');
-                return;
-            }
-
-            let imgBase64 = '';
-            if (file) {
-                try {
-                    imgBase64 = await compressImage(file);
-                } catch (err) {
-                    showToast('Image error', 'error');
-                    return;
-                }
-            }
-
-            const payload = {
-                text: text,
-                image: imgBase64,
-                timestamp: Date.now(),
-                active: true
-            };
-
-            db.ref('system_notification').set(payload)
-                .then(() => {
-                    showToast('Notification sent!', 'success');
-                    document.getElementById('notifText').value = '';
-                    document.getElementById('notifImage').value = '';
-                })
-                .catch(err => showToast(err.message, 'error'));
-        }
-
-        // 6. Admin: Delete Notification
-        function deleteNotification() {
-            showConfirm('Clear Notification?', 'This will remove the alert for all users.').then(res => {
-                if(res.isConfirmed) {
-                    db.ref('system_notification').remove()
-                    .then(() => showToast('Notification cleared.', 'info'));
-                }
-            });
-        }
-
-
-        // ============================================
-        // CUSTOM ALERTS & HELPERS
-        // ============================================
-        const showToast = (title, icon = 'success') => {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: icon,
-                title: title,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                background: '#1a1a1a',
-                color: '#fff',
-                iconColor: '#E50914'
-            });
-        };
-
-        const showConfirm = (title, text, confirmBtnText = 'Yes, do it!') => {
-            return Swal.fire({
-                title: title,
-                text: text,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#E50914',
-                cancelButtonColor: '#333',
-                confirmButtonText: confirmBtnText,
-                background: '#141414',
-                color: '#fff',
-                iconColor: '#E50914'
-            });
-        };
-
-        const compressImage = (file) => {
-            return new Promise((resolve) => {
+            // 2. If larger, we compress
+            return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = (event) => {
@@ -1136,314 +975,105 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const MAX_WIDTH = 800;
-                        const MAX_HEIGHT = 800;
+                        
+                        // Resize logic: Max dimension 1280px (Good balance for web)
+                        const MAX_DIMENSION = 1280; 
                         if (width > height) {
-                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                            if (width > MAX_DIMENSION) {
+                                height *= MAX_DIMENSION / width;
+                                width = MAX_DIMENSION;
+                            }
                         } else {
-                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                            if (height > MAX_DIMENSION) {
+                                width *= MAX_DIMENSION / height;
+                                height = MAX_DIMENSION;
+                            }
                         }
+
                         canvas.width = width;
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                        resolve(dataUrl);
+
+                        // Compress loop: Reduce quality until < 1MB
+                        // Note: toDataURL header adds size, so we target ~900KB
+                        let quality = 0.9;
+                        let base64 = canvas.toDataURL('image/jpeg', quality);
+
+                        while (base64.length * 0.75 > 900 * 1024 && quality > 0.1) {
+                            quality -= 0.1;
+                            base64 = canvas.toDataURL('image/jpeg', quality);
+                        }
+                        
+                        resolve(base64);
                     };
+                    img.onerror = (err) => reject(err);
                 };
+                reader.onerror = (err) => reject(err);
             });
         };
 
-
         // ============================================
-        // AUTH LOGIC (WITH SLIDING TABS)
+        // APP LOGIC
         // ============================================
 
-        function switchAuthTab(mode) {
-            const glider = document.getElementById('authGlider');
-            const loginForm = document.getElementById('loginForm');
-            const signupForm = document.getElementById('signupForm');
-            const btnLogin = document.getElementById('tab-login');
-            const btnSignup = document.getElementById('tab-signup');
+        function fetchApps() { 
+            const loader = document.getElementById('homeLoader');
+            if(loader) loader.style.display = 'block';
 
-            if (mode === 'login') {
-                glider.style.transform = 'translateX(0)';
-                loginForm.classList.remove('hidden');
-                signupForm.classList.add('hidden');
-                btnLogin.classList.add('active');
-                btnSignup.classList.remove('active');
-            } else {
-                glider.style.transform = 'translateX(100%)';
-                loginForm.classList.add('hidden');
-                signupForm.classList.remove('hidden');
-                btnLogin.classList.remove('active');
-                btnSignup.classList.add('active');
-            }
-        }
-
-        auth.onAuthStateChanged((user) => {
-            const navLoginBtn = document.getElementById('navLoginBtn');
-            const navLogoutBtn = document.getElementById('navLogoutBtn');
-            const navDashBtn = document.getElementById('navDashboardBtn');
-            const mobileHeaderLoginBtn = document.getElementById('mobileHeaderLoginBtn');
-            const profileLoggedOut = document.getElementById('profileLoggedOut');
-            const profileLoggedIn = document.getElementById('profileLoggedIn');
-            const profileEmail = document.getElementById('profileEmailDisplay');
-            const profileAdminBtn = document.getElementById('profileAdminBtn');
-
-            if (user) {
-                currentUserEmail = user.email;
-                navLoginBtn.classList.add('hidden');
-                navLogoutBtn.classList.remove('hidden');
-                mobileHeaderLoginBtn.classList.add('hidden');
-                profileLoggedOut.classList.add('hidden');
-                profileLoggedIn.classList.remove('hidden');
-                profileEmail.innerText = user.email.split('@')[0];
-                initUserChat(user.email);
-                if (user.email === ADMIN_EMAIL) {
-                    navDashBtn.classList.remove('hidden');
-                    profileAdminBtn.classList.remove('hidden');
-                    fetchSupportChats(); 
-                } else {
-                    navDashBtn.classList.add('hidden');
-                    profileAdminBtn.classList.add('hidden');
+            setTimeout(() => {
+                if(loader && loader.style.display === 'block') {
+                   loader.innerHTML = '<p class="text-gray-500 text-sm">Request Timed Out. Please Refresh.</p>';
                 }
-            } else {
-                currentUserEmail = null;
-                navLoginBtn.classList.remove('hidden');
-                navLogoutBtn.classList.add('hidden');
-                navDashBtn.classList.add('hidden');
-                mobileHeaderLoginBtn.classList.remove('hidden');
-                profileLoggedOut.classList.remove('hidden');
-                profileLoggedIn.classList.add('hidden');
-            }
-            const savedSection = localStorage.getItem('apnaAddaCurrentSection');
-            if (user && savedSection === 'login') navigateTo(user.email === ADMIN_EMAIL ? 'admin' : 'home');
-            if (!user && savedSection === 'admin') navigateTo('login');
-        });
+            }, 10000);
 
-        function handleGoogleLogin() {
-            var provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).then((result) => {
-                if(result.user.email === ADMIN_EMAIL) navigateTo('admin');
-                else navigateTo('home');
-            }).catch((error) => {
-                Swal.fire({icon:'error', title:'Error', text:error.message, background:'#111', color:'#fff'});
-            });
+            db.ref('apps').on('value', (snapshot) => { 
+                allApps=[]; 
+                const d = snapshot.val(); 
+                if(d) Object.keys(d).forEach(k=>allApps.push({id:k,...d[k]})); 
+                renderPublicGrid(); 
+                renderAdminTable(); 
+                if(loader) loader.style.display = 'none';
+            }, (error) => {
+                console.error("Firebase Error:", error);
+                if(loader) loader.style.display = 'none';
+            }); 
         }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPass').value;
-            const btn = document.getElementById('loginBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "VERIFYING...";
-            btn.disabled = true;
-
-            auth.signInWithEmailAndPassword(email, pass)
-                .then((cred) => {
-                    if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
-                    else navigateTo('home');
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                })
-                .catch((error) => {
-                    Swal.fire({icon:'error', title:'Login Failed', text:error.message, background:'#111', color:'#fff'});
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                });
-        }
-
-        function handleSignupSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('signupEmail').value;
-            const pass = document.getElementById('signupPass').value;
-            const btn = document.getElementById('signupBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "CREATING...";
-            btn.disabled = true;
-
-            auth.createUserWithEmailAndPassword(email, pass)
-                .then((cred) => {
-                    showToast('Account created successfully!');
-                    if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
-                    else navigateTo('home');
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                })
-                .catch((error) => {
-                    Swal.fire({icon:'error', title:'Signup Failed', text:error.message, background:'#111', color:'#fff'});
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                });
-        }
-
-        function handleLogout() {
-            showConfirm('Logout?', 'Are you sure you want to log out?').then((result) => {
-                if(result.isConfirmed) {
-                    localStorage.setItem('apnaAddaCurrentSection', 'home'); 
-                    auth.signOut().then(() => navigateTo('home'));
-                }
-            });
-        }
-
-        // ============================================
-        // CHAT LOGIC
-        // ============================================
-        function sanitizeEmail(email) { return email.replace(/\./g, ','); }
-        function toggleChatWindow() {
-            if (!auth.currentUser) {
-                Swal.fire({title:'Authentication Required', text:'Please login to use support chat.', icon:'warning', showCancelButton:true, confirmButtonText:'LOGIN', confirmButtonColor:'#E50914', background:'#111', color:'#fff'}).then((r)=>{if(r.isConfirmed)navigateTo('login');});
-                return;
-            }
-            const win = document.getElementById('chatWindow'); win.classList.toggle('open');
-            if(win.classList.contains('open')) {
-                document.getElementById('userChatBadge').classList.add('hidden');
-                if(currentUserEmail) db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`).update({ hasUnreadAdmin: false });
-            }
-        }
-        function initUserChat(email) {
-            const chatBody = document.getElementById('userChatBody');
-            db.ref(`support_chats/${sanitizeEmail(email)}`).on('value', snapshot => {
-                const data = snapshot.val(); chatBody.innerHTML = ''; 
-                if (data && data.messages) {
-                    if (data.hasUnreadAdmin) { if (!document.getElementById('chatWindow').classList.contains('open')) document.getElementById('userChatBadge').classList.remove('hidden'); }
-                    Object.values(data.messages).forEach(msg => {
-                        const div = document.createElement('div'); div.className = `chat-message ${msg.sender === 'admin' ? 'msg-admin' : 'msg-user'}`; div.innerText = msg.text; chatBody.appendChild(div);
-                    });
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                }
-            });
-        }
-        function sendUserMessage(e) {
-            e.preventDefault(); const input = document.getElementById('userChatInput'); const text = input.value.trim();
-            if (!text || !currentUserEmail) return;
-            const chatRef = db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`);
-            chatRef.get().then(snap => {
-                const isFirst = !snap.child('messages').exists();
-                chatRef.child('messages').push({sender:'user', text:text, timestamp:firebase.database.ServerValue.TIMESTAMP});
-                chatRef.update({userEmail:currentUserEmail, lastMessageTime:firebase.database.ServerValue.TIMESTAMP, hasUnreadUser:true});
-                input.value = '';
-                if(isFirst) setTimeout(() => { chatRef.child('messages').push({sender:'admin', text:"ONE TEAM MEMBER WILL SHORTLY ASSISTS YOU!", timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({hasUnreadAdmin:true}); }, 500);
-            });
-        }
-        // Admin Chat
-        function fetchSupportChats() {
-            const list = document.getElementById('adminSupportUserList');
-            db.ref('support_chats').orderByChild('lastMessageTime').on('value', s => {
-                list.innerHTML = ''; const d = s.val(); if(!d) { list.innerHTML='<div class="p-4 text-center text-gray-500">No chats</div>'; return; }
-                Object.entries(d).sort((a,b)=>b[1].lastMessageTime-a[1].lastMessageTime).forEach(([k,v])=>{
-                    const div = document.createElement('div'); div.className=`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-800 ${currentAdminChatUser===k?'bg-gray-800 border-l-4 border-l-red-600':''}`;
-                    div.onclick=()=>openAdminChat(k,v.userEmail);
-                    div.innerHTML=`<div class="flex justify-between mb-1"><span class="font-bold text-gray-200 text-sm truncate w-24">${v.userEmail.split('@')[0]}</span><span class="text-xs text-gray-500">${new Date(v.lastMessageTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span></div><div class="text-xs text-gray-400 truncate flex items-center"><i class="fas fa-user-circle mr-1"></i> ${v.userEmail} ${v.hasUnreadUser?'<span class="bg-red-600 w-2 h-2 rounded-full ml-2"></span>':''}</div>`;
-                    list.appendChild(div);
-                });
-            });
-        }
-        function openAdminChat(k,e){ currentAdminChatUser=k; document.getElementById('adminChatHeader').innerHTML=`<span class="text-sm font-bold text-white"><i class="fas fa-user text-red-500 mr-2"></i>${e}</span><button onclick="deleteUserChat()" class="text-red-500 text-xs border border-red-900 px-2 py-1 rounded">DEL</button>`; document.getElementById('adminChatFooter').classList.remove('hidden'); db.ref(`support_chats/${k}`).update({hasUnreadUser:false}); 
-            const cb=document.getElementById('adminChatBody'); db.ref(`support_chats/${k}/messages`).on('value',s=>{ cb.innerHTML=''; const m=s.val(); if(m)Object.values(m).forEach(x=>{ const d=document.createElement('div'); d.className=`max-w-[80%] p-2 rounded text-xs mb-2 ${x.sender==='admin'?'bg-red-900 text-white self-end':'bg-gray-800 text-gray-300 self-start'}`; d.innerText=x.text; cb.appendChild(d); }); cb.scrollTop=cb.scrollHeight; });
-        }
-        function sendAdminReply(e){ e.preventDefault(); if(!currentAdminChatUser)return; const i=document.getElementById('adminChatInput'); const t=i.value.trim(); if(!t)return; 
-            const r=db.ref(`support_chats/${currentAdminChatUser}`); r.child('messages').push({sender:'admin',text:t,timestamp:firebase.database.ServerValue.TIMESTAMP}); r.update({lastMessageTime:firebase.database.ServerValue.TIMESTAMP,hasUnreadAdmin:true}); i.value=''; }
-        function deleteUserChat(){ if(!currentAdminChatUser)return; showConfirm('Delete Chat?', 'This cannot be undone.').then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
-        
-        // ============================================
-        // APP LOGIC (ADMIN + USER)
-        // ============================================
-
-        function fetchApps() { db.ref('apps').on('value', s => { allApps=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allApps.push({id:k,...d[k]})); renderPublicGrid(); renderAdminTable(); }); }
 
         function renderPublicGrid() {
-            const g1 = document.getElementById('homeAppsGrid');
-            const g2 = document.getElementById('appsGrid');
-            document.getElementById('homeLoader').style.display = 'none';
-            g1.innerHTML = '';
-            g2.innerHTML = '';
+            const g1 = document.getElementById('homeAppsGrid'); const g2 = document.getElementById('appsGrid');
+            const loader = document.getElementById('homeLoader');
+            if(loader) loader.style.display = 'none';
 
-            // Stop existing intervals
+            g1.innerHTML = ''; g2.innerHTML = '';
             if(countdownInterval) clearInterval(countdownInterval);
 
+            if(allApps.length === 0) {
+                g1.innerHTML = '<p class="col-span-3 text-center text-gray-500">No apps found.</p>';
+            }
+
             allApps.forEach(a => {
-                let badgeColor = 'bg-gray-600';
-                let badgeText = '';
-                let btnText = 'WAIT';
-                let btnClass = 'bg-gray-800 text-gray-500 action-btn';
-                let link = '#';
-                let isClickable = false;
+                let badgeColor = 'bg-gray-600'; let badgeText = ''; let btnText = 'WAIT'; let btnClass = 'bg-gray-800 text-gray-500 action-btn'; let link = '#'; let isClickable = false;
+                if (a.status === 'Launched') { badgeColor = 'bg-green-600'; badgeText = 'LAUNCHED'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn'; link = a.link; isClickable = true; } 
+                else if (a.status === 'Coming Soon') { badgeColor = 'bg-blue-600'; badgeText = 'COMING SOON'; } 
+                else if (a.status === 'come_tomorrow') { badgeColor = 'bg-blue-500'; badgeText = 'COME TOMORROW'; } 
+                else if (a.status === 'delay') { badgeColor = 'bg-yellow-600'; badgeText = 'DELAY IN LAUNCH'; } 
+                else if (a.status === 'date') { badgeColor = 'bg-blue-600'; badgeText = `COMING ON: ${a.statusDetail}`; } 
+                else if (a.status === 'weeks') { badgeColor = 'bg-purple-600'; badgeText = `COMING IN ${a.statusDetail} WEEKS`; } 
+                else if (a.status === 'months') { badgeColor = 'bg-indigo-600'; badgeText = `COMING IN ${a.statusDetail} MONTHS`; } 
+                else if (a.status === 'hours') { badgeColor = 'bg-orange-500 animate-pulse badge-container'; badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; } 
+                else if (a.status === 'countdown') { badgeColor = 'bg-red-600 animate-pulse badge-container'; badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; } 
+                else if (a.status === 'relaunch_date') { badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH: ${a.statusDetail}`; }
+                else if (a.status === 'relaunch_weeks') { badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH IN ${a.statusDetail} WEEKS`; }
+                else if (a.status === 'relaunch_hours') { badgeColor = 'bg-pink-600 animate-pulse badge-container'; badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; }
+                else if (a.status === 'relaunch_countdown') { badgeColor = 'bg-pink-600 animate-pulse badge-container'; badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; }
+                else if (a.status === 'error') { badgeColor = 'bg-red-800'; badgeText = 'WEBSITE ERROR'; btnText = 'WAIT FOR RELAUNCH'; btnClass = 'bg-red-600 text-white action-btn'; link = '#'; isClickable = false; }
+                else if (a.status === 'emergency') { badgeColor = 'bg-red-600 animate-pulse border-2 border-yellow-400'; badgeText = 'EMERGENCY LAUNCH'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn'; link = a.link; isClickable = true; }
+                else if (a.status === 'none') { badgeText = ''; }
 
-                // --- STATUS LOGIC ---
-                if (a.status === 'Launched') {
-                    badgeColor = 'bg-green-600'; badgeText = 'LAUNCHED'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn'; link = a.link; isClickable = true;
-                } else if (a.status === 'Coming Soon') {
-                    badgeColor = 'bg-blue-600'; badgeText = 'COMING SOON';
-                } else if (a.status === 'come_tomorrow') {
-                    badgeColor = 'bg-blue-500'; badgeText = 'COME TOMORROW';
-                } else if (a.status === 'delay') {
-                    badgeColor = 'bg-yellow-600'; badgeText = 'DELAY IN LAUNCH';
-                } else if (a.status === 'date') {
-                    badgeColor = 'bg-blue-600'; badgeText = `COMING ON: ${a.statusDetail}`; 
-                } else if (a.status === 'weeks') {
-                    badgeColor = 'bg-purple-600'; badgeText = `COMING IN ${a.statusDetail} WEEKS`;
-                } else if (a.status === 'months') {
-                    badgeColor = 'bg-indigo-600'; badgeText = `COMING IN ${a.statusDetail} MONTHS`;
-                } else if (a.status === 'hours') {
-                    badgeColor = 'bg-orange-500 animate-pulse badge-container';
-                    badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`;
-                } else if (a.status === 'countdown') {
-                    badgeColor = 'bg-red-600 animate-pulse badge-container';
-                    badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`;
-                } 
-                // --- NEW STATUSES ---
-                else if (a.status === 'relaunch_date') {
-                    badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH: ${a.statusDetail}`;
-                }
-                else if (a.status === 'relaunch_weeks') {
-                    badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH IN ${a.statusDetail} WEEKS`;
-                }
-                else if (a.status === 'relaunch_hours') {
-                    badgeColor = 'bg-pink-600 animate-pulse badge-container';
-                    badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`;
-                }
-                else if (a.status === 'relaunch_countdown') {
-                    badgeColor = 'bg-pink-600 animate-pulse badge-container';
-                    badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`;
-                }
-                else if (a.status === 'error') {
-                    badgeColor = 'bg-red-800'; badgeText = 'WEBSITE ERROR'; btnText = 'WAIT FOR RELAUNCH'; btnClass = 'bg-red-600 text-white action-btn'; link = '#'; isClickable = false;
-                }
-                else if (a.status === 'emergency') {
-                    badgeColor = 'bg-red-600 animate-pulse border-2 border-yellow-400'; badgeText = 'EMERGENCY LAUNCH'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn'; link = a.link; isClickable = true;
-                }
-                else if (a.status === 'none') {
-                    badgeText = ''; 
-                }
-
-                // FIXED: Image Container
-                const html = `
-                <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}">
-                    <div class="relative w-full h-48 bg-gray-900 border-b border-gray-800">
-                        ${a.image 
-                            ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` 
-                            : `<div class="w-full h-full flex items-center justify-center text-red-600 font-bold text-2xl">ADDA</div>`
-                        }
-                        ${badgeText ? `
-                        <span class="absolute top-2 right-2 ${badgeColor} text-white text-[10px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">
-                            ${badgeText}
-                        </span>` : ''}
-                    </div>
-                    <div class="p-4 bg-gray-900 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white mb-4 text-lg line-clamp-1">${a.name}</h3>
-                        <a href="${link}" target="_blank" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">
-                            ${btnText}
-                        </a>
-                    </div>
-                </div>`;
-
-                g1.innerHTML += html;
-                g2.innerHTML += html;
+                const html = `<div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}"><div class="relative w-full h-48 bg-gray-900 border-b border-gray-800">${a.image ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` : `<div class="w-full h-full flex items-center justify-center text-red-600 font-bold text-2xl">ADDA</div>`}${badgeText ? `<span class="absolute top-2 right-2 ${badgeColor} text-white text-[10px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">${badgeText}</span>` : ''}</div><div class="p-4 bg-gray-900 flex flex-col flex-grow"><h3 class="font-bold text-white mb-4 text-lg line-clamp-1">${a.name}</h3><a href="${link}" target="_blank" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">${btnText}</a></div></div>`;
+                g1.innerHTML += html; g2.innerHTML += html;
             });
-
             startCountdownTimers();
         }
 
@@ -1451,201 +1081,223 @@
             const updateTimers = () => {
                 const timers = document.querySelectorAll('.countdown-timer');
                 timers.forEach(timer => {
-                    const targetStr = timer.getAttribute('data-target');
-                    const launchLink = timer.getAttribute('data-link');
-                    const appId = timer.getAttribute('data-id');
-                    const statusType = timer.getAttribute('data-type');
-                    
+                    const targetStr = timer.getAttribute('data-target'); const launchLink = timer.getAttribute('data-link'); const appId = timer.getAttribute('data-id'); const statusType = timer.getAttribute('data-type');
                     if (!targetStr) return;
-                    
-                    const targetDate = new Date(targetStr).getTime();
-                    const now = new Date().getTime();
-                    const distance = targetDate - now;
-
-                    // --- TIMER FINISHED LOGIC ---
+                    const distance = new Date(targetStr).getTime() - new Date().getTime();
                     if (distance < 0) {
-                        const isRelaunch = statusType.includes('relaunch');
-                        timer.innerHTML = isRelaunch ? "RELAUNCHED" : "LAUNCHED";
-                        const badgeContainer = timer.closest('.badge-container');
-                        if (badgeContainer) {
-                            badgeContainer.classList.remove('bg-red-600', 'bg-orange-500', 'bg-pink-600', 'animate-pulse');
-                            badgeContainer.classList.add('bg-green-600');
-                            badgeContainer.innerHTML = isRelaunch ? "RELAUNCHED" : "LAUNCHED"; 
-                        }
-                        const cards = document.querySelectorAll(`#card-${appId}`);
-                        cards.forEach(card => {
-                            const btn = card.querySelector('.action-btn');
-                            if (btn && btn.innerText !== 'OPEN') {
-                                btn.innerText = "OPEN";
-                                btn.classList.remove('bg-gray-800', 'text-gray-500');
-                                btn.classList.add('bg-red-600', 'text-white');
-                                btn.href = launchLink;
-                                btn.setAttribute('target', '_blank'); 
-                                btn.onclick = null;
-                            }
-                        });
+                        const isRelaunch = statusType.includes('relaunch'); timer.innerHTML = isRelaunch ? "RELAUNCHED" : "LAUNCHED";
+                        const badgeContainer = timer.closest('.badge-container'); if (badgeContainer) { badgeContainer.classList.remove('bg-red-600', 'bg-orange-500', 'bg-pink-600', 'animate-pulse'); badgeContainer.classList.add('bg-green-600'); badgeContainer.innerHTML = isRelaunch ? "RELAUNCHED" : "LAUNCHED"; }
+                        document.querySelectorAll(`#card-${appId}`).forEach(card => { const btn = card.querySelector('.action-btn'); if (btn && btn.innerText !== 'OPEN') { btn.innerText = "OPEN"; btn.classList.remove('bg-gray-800', 'text-gray-500'); btn.classList.add('bg-red-600', 'text-white'); btn.href = launchLink; btn.setAttribute('target', '_blank'); btn.onclick = null; } });
                         return;
                     }
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    let display = `${minutes}m ${seconds}s`;
-                    if (hours > 0) display = `${hours}h ${display}`;
-                    if (days > 0) display = `${days}d ${display}`;
-                    timer.innerHTML = display;
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24)); const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    let display = `${minutes}m ${seconds}s`; if (hours > 0) display = `${hours}h ${display}`; if (days > 0) display = `${days}d ${display}`; timer.innerHTML = display;
                 });
             };
-            updateTimers();
-            countdownInterval = setInterval(updateTimers, 1000);
+            updateTimers(); countdownInterval = setInterval(updateTimers, 1000);
         }
 
+        // --- FIXED APP SUBMIT LOGIC (AUTO COMPRESS) ---
+        async function handleAppSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('editAppId').value;
+            const f = document.getElementById('appImage').files[0];
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerText;
+
+            let imageBase64 = '';
+            
+            if (f) {
+                btn.innerText = "Compressing...";
+                try {
+                    // Auto compress > 1MB images
+                    imageBase64 = await compressAndConvertToBase64(f);
+                } catch(err) {
+                    showToast('Error processing image', 'error');
+                    btn.innerText = originalText;
+                    return;
+                }
+            } else if (id) {
+                const o = allApps.find(x => x.id === id); 
+                if (o) imageBase64 = o.image;
+            }
+
+            const statusType = document.getElementById('launchStatus').value;
+            let detail = '';
+            if (statusType.includes('date')) detail = document.getElementById('statusDate').value;
+            else if (statusType.includes('weeks')) detail = document.getElementById('statusWeeks').value;
+            else if (statusType.includes('months')) detail = document.getElementById('statusMonths').value;
+            else if (statusType.includes('hours')) { const h = parseFloat(document.getElementById('statusHours').value); if (!isNaN(h)) { detail = new Date(Date.now() + h * 60 * 60 * 1000).toISOString(); } }
+            else if (statusType.includes('countdown')) detail = document.getElementById('statusCountdown').value;
+
+            const p = { 
+                name: document.getElementById('appName').value, 
+                status: statusType, 
+                statusDetail: detail, 
+                link: document.getElementById('appLink').value, 
+                image: imageBase64 || '' 
+            };
+
+            btn.innerText = "SAVING...";
+            
+            const promise = id ? db.ref('apps/' + id).update(p) : db.ref('apps').push(p);
+            
+            promise.then(() => {
+                showToast(id ? 'App updated!' : 'App added!', 'success');
+                resetForm();
+            }).catch((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Save Failed',
+                    text: error.message,
+                    background: '#1a1a1a',
+                    color: '#fff'
+                });
+            }).finally(() => {
+                btn.innerText = originalText;
+            });
+        }
+        
         function toggleStatusFields() {
             const v = document.getElementById('launchStatus').value;
-            ['dateField', 'weeksField', 'monthsField', 'hoursField', 'countdownField'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
+            ['dateField', 'weeksField', 'monthsField', 'hoursField', 'countdownField'].forEach(id => document.getElementById(id).classList.add('hidden'));
             if (v.includes('date')) document.getElementById('dateField').classList.remove('hidden');
             if (v.includes('weeks')) document.getElementById('weeksField').classList.remove('hidden');
             if (v.includes('months')) document.getElementById('monthsField').classList.remove('hidden');
             if (v.includes('hours')) document.getElementById('hoursField').classList.remove('hidden');
             if (v.includes('countdown')) document.getElementById('countdownField').classList.remove('hidden');
         }
+        function deleteApp(id) { showConfirm('Delete App?', 'Permanently remove app?').then((result) => { if (result.isConfirmed) { db.ref('apps/' + id).remove(); showToast('App deleted.', 'info'); } }); }
+        function editApp(id) { const a = allApps.find(x => x.id === id); if (!a) return; document.getElementById('editAppId').value = a.id; document.getElementById('appName').value = a.name; document.getElementById('launchStatus').value = a.status; document.getElementById('appLink').value = a.link || ''; toggleStatusFields(); if (a.status.includes('date')) document.getElementById('statusDate').value = a.statusDetail; if (a.status.includes('weeks')) document.getElementById('statusWeeks').value = a.statusDetail; if (a.status.includes('months')) document.getElementById('statusMonths').value = a.statusDetail; if (a.status.includes('hours')) { const remainingHours = (new Date(a.statusDetail).getTime() - new Date().getTime()) / (1000 * 60 * 60); document.getElementById('statusHours').value = remainingHours > 0 ? remainingHours.toFixed(2) : 0; } if (a.status.includes('countdown')) document.getElementById('statusCountdown').value = a.statusDetail; showToast('Editing: ' + a.name, 'info'); }
+        function resetForm(){ document.getElementById('appForm').reset(); document.getElementById('editAppId').value=''; toggleStatusFields(); }
 
-        async function handleAppSubmit(e) {
-            e.preventDefault();
-            const id = document.getElementById('editAppId').value;
-            const f = document.getElementById('appImage').files[0];
-            
-            // --- NEW: AUTO COMPRESS IMAGE ---
-            let i = null;
-            if (f) {
-                try {
-                    i = await compressImage(f); 
-                } catch(err) {
-                    showToast('Image processing failed', 'error');
-                    return;
-                }
-            } else if (id) {
-                const o = allApps.find(x => x.id === id);
-                if (o) i = o.image;
-            }
-
-            const statusType = document.getElementById('launchStatus').value;
-            let detail = '';
-            
-            if (statusType.includes('date')) detail = document.getElementById('statusDate').value;
-            else if (statusType.includes('weeks')) detail = document.getElementById('statusWeeks').value;
-            else if (statusType.includes('months')) detail = document.getElementById('statusMonths').value;
-            else if (statusType.includes('hours')) {
-                const h = parseFloat(document.getElementById('statusHours').value);
-                if (!isNaN(h)) {
-                    // Continuous running logic: save target time
-                    const target = new Date(Date.now() + h * 60 * 60 * 1000);
-                    detail = target.toISOString(); 
-                }
-            }
-            else if (statusType.includes('countdown')) detail = document.getElementById('statusCountdown').value;
-
-            const p = {
-                name: document.getElementById('appName').value,
-                status: statusType, 
-                statusDetail: detail,
-                link: document.getElementById('appLink').value,
-                image: i || ''
-            };
-
-            if (id) {
-                db.ref('apps/' + id).update(p);
-                showToast('App updated successfully!');
-            } else {
-                db.ref('apps').push(p);
-                showToast('App added successfully!');
-            }
-
-            resetForm();
-        }
-
-        function deleteApp(id) {
-            showConfirm('Delete App?', 'This will permanently remove the app from the database.').then((result) => {
-                if (result.isConfirmed) {
-                    db.ref('apps/' + id).remove();
-                    showToast('App deleted.', 'info');
-                }
-            });
-        }
-
-        function editApp(id) {
-            const a = allApps.find(x => x.id === id);
-            if (!a) return;
-            document.getElementById('editAppId').value = a.id;
-            document.getElementById('appName').value = a.name;
-            document.getElementById('launchStatus').value = a.status;
-            document.getElementById('appLink').value = a.link || '';
-            toggleStatusFields();
-            
-            if (a.status.includes('date')) document.getElementById('statusDate').value = a.statusDetail;
-            if (a.status.includes('weeks')) document.getElementById('statusWeeks').value = a.statusDetail;
-            if (a.status.includes('months')) document.getElementById('statusMonths').value = a.statusDetail;
-            
-            if (a.status.includes('hours')) {
-                const target = new Date(a.statusDetail).getTime();
-                const now = new Date().getTime();
-                let remainingHours = (target - now) / (1000 * 60 * 60);
-                if(remainingHours < 0) remainingHours = 0;
-                document.getElementById('statusHours').value = remainingHours.toFixed(2);
-            }
-            
-            if (a.status.includes('countdown')) document.getElementById('statusCountdown').value = a.statusDetail;
-            
-            showToast('Editing App: ' + a.name, 'info');
-        }
-
-        function resetForm(){
-            document.getElementById('appForm').reset();
-            document.getElementById('editAppId').value='';
-            toggleStatusFields();
-        }
-
+        // --- SLIDESHOW LOGIC (AUTO COMPRESS) ---
         function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black p-2 border border-gray-700 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="deleteSlide('${x.id}')" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
         
         async function uploadSlide(){
             const f=document.getElementById('slideUploadInput').files[0]; 
+            const btn = document.getElementById('slideUploadBtn');
+            
             if(f){
+                btn.innerText = "Processing...";
                 try {
-                    const i = await compressImage(f);
-                    db.ref('slides').push({image:i});
+                    // Auto compress here too
+                    const base64 = await compressAndConvertToBase64(f);
+                    db.ref('slides').push({image: base64});
                     showToast('Slide uploaded successfully!');
                     document.getElementById('slideUploadInput').value = '';
-                } catch(e) {
-                    showToast('Slide upload failed', 'error');
+                } catch(e) { 
+                    showToast('Slide upload failed', 'error'); 
                 }
+                btn.innerText = "Upload";
             }
         }
+        function deleteSlide(id) { showConfirm('Delete Slide?', 'Remove from slideshow?').then((result) => { if (result.isConfirmed) { db.ref('slides/' + id).remove(); showToast('Slide deleted', 'info'); } }); }
 
-        function deleteSlide(id) {
-            showConfirm('Delete Slide?', 'Remove this image from slideshow?').then((result) => {
-                if (result.isConfirmed) {
-                    db.ref('slides/' + id).remove();
-                    showToast('Slide deleted', 'info');
+        // --- NOTIFICATION LOGIC (AUTO COMPRESS) ---
+        function initNotifications() {
+            db.ref('system_notifications').limitToLast(20).on('value', (snapshot) => {
+                const data = snapshot.val(); allNotifications = [];
+                if (data) { Object.keys(data).forEach(key => allNotifications.push({ id: key, ...data[key] })); allNotifications.sort((a, b) => b.timestamp - a.timestamp); if (allNotifications.length > 0) { currentNotification = allNotifications[0]; checkIfSeen(currentNotification.timestamp); } else { currentNotification = null; hideRedDots(); } } else { currentNotification = null; hideRedDots(); }
+                renderAdminNotifications();
+            });
+        }
+        function checkIfSeen(timestamp) { const lastSeenTime = localStorage.getItem('apnaAddaLastNotifTime'); if (!lastSeenTime || parseInt(lastSeenTime) < timestamp) { showRedDots(); } else { hideRedDots(); } }
+        function showRedDots() { document.getElementById('desktopNotifDot').classList.remove('hidden'); document.getElementById('mobileNotifDot').classList.remove('hidden'); }
+        function hideRedDots() { document.getElementById('desktopNotifDot').classList.add('hidden'); document.getElementById('mobileNotifDot').classList.add('hidden'); }
+        function openNotificationModal() { if (!currentNotification) { Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No new notifications', showConfirmButton: false, timer: 2000, background: '#1a1a1a', color: '#fff' }); return; } const imgContainer = document.getElementById('notifContentImage'); const textContainer = document.getElementById('notifContentText'); imgContainer.innerHTML = ''; textContainer.innerHTML = ''; if (currentNotification.image) { imgContainer.innerHTML = `<img src="${currentNotification.image}" class="notif-img-display">`; } if (currentNotification.text) { textContainer.innerText = currentNotification.text; textContainer.style.display = 'block'; } else { textContainer.style.display = 'none'; } document.getElementById('notificationModal').classList.add('open'); localStorage.setItem('apnaAddaLastNotifTime', currentNotification.timestamp); hideRedDots(); }
+        function closeNotificationModal(e) { document.getElementById('notificationModal').classList.remove('open'); }
+        
+        async function handleNotificationSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('editNotifId').value;
+            const text = document.getElementById('notifText').value.trim();
+            const file = document.getElementById('notifImage').files[0];
+            const btn = document.getElementById('notifSubmitBtn');
+            const originalText = btn.innerText;
+
+            if (!text && !file && !id) { showToast('Please add text or an image.', 'warning'); return; }
+
+            let imgUrl = '';
+            // Retain existing image if editing and no new file selected
+            if (id && !file) { 
+                const existing = allNotifications.find(n => n.id === id); 
+                if(existing) imgUrl = existing.image || ''; 
+            }
+
+            if (file) {
+                btn.innerText = "Compressing...";
+                try { imgUrl = await compressAndConvertToBase64(file); } 
+                catch (err) { showToast('Image processing failed', 'error'); btn.innerText = originalText; return; }
+            }
+
+            const payload = { text: text, image: imgUrl, timestamp: Date.now() };
+            btn.innerText = "SENDING...";
+
+            let promise;
+
+            if (id) {
+                const result = await showConfirm('Update Notification?', 'Users will see the updated version.');
+                if(!result.isConfirmed) {
+                    btn.innerText = originalText;
+                    return;
                 }
-            });
-        }
+                promise = db.ref('system_notifications/' + id).update(payload);
+            } else {
+                promise = db.ref('system_notifications').push(payload);
+            }
 
-        function renderAdminTable(){
-            const t=document.getElementById('adminAppsTable');t.innerHTML='';
-            allApps.forEach(a=>{
-                t.innerHTML+=`<tr class="border-b border-gray-800">
-                    <td class="p-3 text-white">${a.name}</td>
-                    <td class="p-3 text-xs text-gray-400">${a.status}</td>
-                    <td class="p-3 text-right">
-                        <button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteApp('${a.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
+            promise.then(() => {
+                showToast(id ? 'Updated successfully!' : 'Notification sent!', 'success');
+                resetNotifForm();
+            }).catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Sending Failed',
+                    text: err.message,
+                    background: '#1a1a1a',
+                    color: '#fff'
+                });
+            }).finally(() => {
+                 btn.innerText = originalText;
             });
         }
+        
+        function renderAdminNotifications() {
+            const table = document.getElementById('adminNotifTable'); if(!table) return; table.innerHTML = '';
+            allNotifications.forEach(notif => { const truncatedText = notif.text ? (notif.text.length > 30 ? notif.text.substring(0,30) + '...' : notif.text) : 'Image Only'; const dateStr = new Date(notif.timestamp).toLocaleDateString() + ' ' + new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); table.innerHTML += `<tr class="border-b border-gray-800 hover:bg-gray-800 transition"><td class="p-2"><div class="flex items-center gap-2">${notif.image ? `<img src="${notif.image}" class="w-8 h-8 rounded object-cover border border-gray-600">` : '<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs"><i class="fas fa-comment"></i></div>'}<div class="flex flex-col"><span class="text-white font-bold">${truncatedText}</span><span class="text-[10px] text-gray-500">${dateStr}</span></div></div></td><td class="p-2 text-right"><button onclick="editNotification('${notif.id}')" class="text-blue-400 mr-3 hover:text-white"><i class="fas fa-edit"></i></button><button onclick="deleteNotification('${notif.id}')" class="text-red-500 hover:text-white"><i class="fas fa-trash"></i></button></td></tr>`; });
+        }
+        function editNotification(id) { const notif = allNotifications.find(n => n.id === id); if (!notif) return; document.getElementById('editNotifId').value = notif.id; document.getElementById('notifText').value = notif.text || ''; document.getElementById('notifSubmitBtn').innerText = "UPDATE"; document.getElementById('notifSubmitBtn').classList.add('bg-yellow-500', 'text-black'); document.getElementById('notifSubmitBtn').classList.remove('bg-white'); showToast('Editing notification...', 'info'); }
+        function deleteNotification(id) { showConfirm('Delete Notification?', 'This will verify removing this alert history.').then(res => { if(res.isConfirmed) { db.ref('system_notifications/' + id).remove().then(() => showToast('Notification deleted.', 'info')); } }); }
+        function resetNotifForm() { document.getElementById('editNotifId').value = ''; document.getElementById('notifText').value = ''; document.getElementById('notifImage').value = ''; document.getElementById('notifSubmitBtn').innerText = "SEND"; document.getElementById('notifSubmitBtn').classList.remove('bg-yellow-500', 'text-black'); document.getElementById('notifSubmitBtn').classList.add('bg-white'); }
+        function renderAdminTable(){ const t=document.getElementById('adminAppsTable');t.innerHTML=''; allApps.forEach(a=>{ t.innerHTML+=`<tr class="border-b border-gray-800"><td class="p-3 text-white">${a.name}</td><td class="p-3 text-xs text-gray-400">${a.status}</td><td class="p-3 text-right"><button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteApp('${a.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`; }); }
+
+        // --- AUTH & OTHER ---
+        function switchAuthTab(mode) {
+            const glider = document.getElementById('authGlider'); const loginForm = document.getElementById('loginForm'); const signupForm = document.getElementById('signupForm'); const btnLogin = document.getElementById('tab-login'); const btnSignup = document.getElementById('tab-signup');
+            if (mode === 'login') { glider.style.transform = 'translateX(0)'; loginForm.classList.remove('hidden'); signupForm.classList.add('hidden'); btnLogin.classList.add('active'); btnSignup.classList.remove('active'); } 
+            else { glider.style.transform = 'translateX(100%)'; loginForm.classList.add('hidden'); signupForm.classList.remove('hidden'); btnLogin.classList.remove('active'); btnSignup.classList.add('active'); }
+        }
+        auth.onAuthStateChanged((user) => {
+            const navLoginBtn = document.getElementById('navLoginBtn'); const navLogoutBtn = document.getElementById('navLogoutBtn'); const navDashBtn = document.getElementById('navDashboardBtn'); const mobileHeaderLoginBtn = document.getElementById('mobileHeaderLoginBtn'); const profileLoggedOut = document.getElementById('profileLoggedOut'); const profileLoggedIn = document.getElementById('profileLoggedIn'); const profileEmail = document.getElementById('profileEmailDisplay'); const profileAdminBtn = document.getElementById('profileAdminBtn');
+            if (user) { currentUserEmail = user.email; navLoginBtn.classList.add('hidden'); navLogoutBtn.classList.remove('hidden'); mobileHeaderLoginBtn.classList.add('hidden'); profileLoggedOut.classList.add('hidden'); profileLoggedIn.classList.remove('hidden'); profileEmail.innerText = user.email.split('@')[0]; initUserChat(user.email); if (user.email === ADMIN_EMAIL) { navDashBtn.classList.remove('hidden'); profileAdminBtn.classList.remove('hidden'); fetchSupportChats(); } else { navDashBtn.classList.add('hidden'); profileAdminBtn.classList.add('hidden'); } } 
+            else { currentUserEmail = null; navLoginBtn.classList.remove('hidden'); navLogoutBtn.classList.add('hidden'); navDashBtn.classList.add('hidden'); mobileHeaderLoginBtn.classList.remove('hidden'); profileLoggedOut.classList.remove('hidden'); profileLoggedIn.classList.add('hidden'); }
+            const savedSection = localStorage.getItem('apnaAddaCurrentSection'); if (user && savedSection === 'login') navigateTo(user.email === ADMIN_EMAIL ? 'admin' : 'home'); if (!user && savedSection === 'admin') navigateTo('login');
+        });
+        function handleGoogleLogin() { var provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(provider).then((result) => { if(result.user.email === ADMIN_EMAIL) navigateTo('admin'); else navigateTo('home'); }).catch((error) => { Swal.fire({icon:'error', title:'Error', text:error.message, background:'#111', color:'#fff'}); }); }
+        function handleLoginSubmit(e) { e.preventDefault(); const email = document.getElementById('loginEmail').value; const pass = document.getElementById('loginPass').value; const btn = document.getElementById('loginBtn'); const originalText = btn.innerText; btn.innerText = "VERIFYING..."; btn.disabled = true; auth.signInWithEmailAndPassword(email, pass).then((cred) => { if(cred.user.email === ADMIN_EMAIL) navigateTo('admin'); else navigateTo('home'); btn.innerText = originalText; btn.disabled = false; }).catch((error) => { Swal.fire({icon:'error', title:'Login Failed', text:error.message, background:'#111', color:'#fff'}); btn.innerText = originalText; btn.disabled = false; }); }
+        function handleSignupSubmit(e) { e.preventDefault(); const email = document.getElementById('signupEmail').value; const pass = document.getElementById('signupPass').value; const btn = document.getElementById('signupBtn'); const originalText = btn.innerText; btn.innerText = "CREATING..."; btn.disabled = true; auth.createUserWithEmailAndPassword(email, pass).then((cred) => { showToast('Account created successfully!'); if(cred.user.email === ADMIN_EMAIL) navigateTo('admin'); else navigateTo('home'); btn.innerText = originalText; btn.disabled = false; }).catch((error) => { Swal.fire({icon:'error', title:'Signup Failed', text:error.message, background:'#111', color:'#fff'}); btn.innerText = originalText; btn.disabled = false; }); }
+        function handleLogout() { showConfirm('Logout?', 'Are you sure you want to log out?').then((result) => { if(result.isConfirmed) { localStorage.setItem('apnaAddaCurrentSection', 'home'); auth.signOut().then(() => navigateTo('home')); } }); }
+        function sanitizeEmail(email) { return email.replace(/\./g, ','); }
+        function toggleChatWindow() { if (!auth.currentUser) { Swal.fire({title:'Authentication Required', text:'Please login to use support chat.', icon:'warning', showCancelButton:true, confirmButtonText:'LOGIN', confirmButtonColor:'#E50914', background:'#111', color:'#fff'}).then((r)=>{if(r.isConfirmed)navigateTo('login');}); return; } const win = document.getElementById('chatWindow'); win.classList.toggle('open'); if(win.classList.contains('open')) { document.getElementById('userChatBadge').classList.add('hidden'); if(currentUserEmail) db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`).update({ hasUnreadAdmin: false }); } }
+        function initUserChat(email) { const chatBody = document.getElementById('userChatBody'); db.ref(`support_chats/${sanitizeEmail(email)}`).limitToLast(50).on('value', snapshot => { const data = snapshot.val(); chatBody.innerHTML = ''; if (data && data.messages) { if (data.hasUnreadAdmin) { if (!document.getElementById('chatWindow').classList.contains('open')) document.getElementById('userChatBadge').classList.remove('hidden'); } Object.values(data.messages).forEach(msg => { const div = document.createElement('div'); div.className = `chat-message ${msg.sender === 'admin' ? 'msg-admin' : 'msg-user'}`; div.innerText = msg.text; chatBody.appendChild(div); }); chatBody.scrollTop = chatBody.scrollHeight; } }); }
+        function sendUserMessage(e) { e.preventDefault(); const input = document.getElementById('userChatInput'); const text = input.value.trim(); if (!text || !currentUserEmail) return; const chatRef = db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`); chatRef.get().then(snap => { const isFirst = !snap.child('messages').exists(); chatRef.child('messages').push({sender:'user', text:text, timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({userEmail:currentUserEmail, lastMessageTime:firebase.database.ServerValue.TIMESTAMP, hasUnreadUser:true}); input.value = ''; if(isFirst) setTimeout(() => { chatRef.child('messages').push({sender:'admin', text:"ONE TEAM MEMBER WILL SHORTLY ASSISTS YOU!", timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({hasUnreadAdmin:true}); }, 500); }); }
+        function fetchSupportChats() { const list = document.getElementById('adminSupportUserList'); db.ref('support_chats').orderByChild('lastMessageTime').limitToLast(20).on('value', s => { list.innerHTML = ''; const d = s.val(); if(!d) { list.innerHTML='<div class="p-4 text-center text-gray-500">No chats</div>'; return; } Object.entries(d).sort((a,b)=>b[1].lastMessageTime-a[1].lastMessageTime).forEach(([k,v])=>{ const div = document.createElement('div'); div.className=`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-800 ${currentAdminChatUser===k?'bg-gray-800 border-l-4 border-l-red-600':''}`; div.onclick=()=>openAdminChat(k,v.userEmail); div.innerHTML=`<div class="flex justify-between mb-1"><span class="font-bold text-gray-200 text-sm truncate w-24">${v.userEmail.split('@')[0]}</span><span class="text-xs text-gray-500">${new Date(v.lastMessageTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span></div><div class="text-xs text-gray-400 truncate flex items-center"><i class="fas fa-user-circle mr-1"></i> ${v.userEmail} ${v.hasUnreadUser?'<span class="bg-red-600 w-2 h-2 rounded-full ml-2"></span>':''}</div>`; list.appendChild(div); }); }); }
+        function openAdminChat(k,e){ currentAdminChatUser=k; document.getElementById('adminChatHeader').innerHTML=`<span class="text-sm font-bold text-white"><i class="fas fa-user text-red-500 mr-2"></i>${e}</span><button onclick="deleteUserChat()" class="text-red-500 text-xs border border-red-900 px-2 py-1 rounded">DEL</button>`; document.getElementById('adminChatFooter').classList.remove('hidden'); db.ref(`support_chats/${k}`).update({hasUnreadUser:false}); const cb=document.getElementById('adminChatBody'); db.ref(`support_chats/${k}/messages`).limitToLast(50).on('value',s=>{ cb.innerHTML=''; const m=s.val(); if(m)Object.values(m).forEach(x=>{ const d=document.createElement('div'); d.className=`max-w-[80%] p-2 rounded text-xs mb-2 ${x.sender==='admin'?'bg-red-900 text-white self-end':'bg-gray-800 text-gray-300 self-start'}`; d.innerText=x.text; cb.appendChild(d); }); cb.scrollTop=cb.scrollHeight; }); }
+        function sendAdminReply(e){ e.preventDefault(); if(!currentAdminChatUser)return; const i=document.getElementById('adminChatInput'); const t=i.value.trim(); if(!t)return; const r=db.ref(`support_chats/${currentAdminChatUser}`); r.child('messages').push({sender:'admin',text:t,timestamp:firebase.database.ServerValue.TIMESTAMP}); r.update({lastMessageTime:firebase.database.ServerValue.TIMESTAMP,hasUnreadAdmin:true}); i.value=''; }
+        function deleteUserChat(){ if(!currentAdminChatUser)return; showConfirm('Delete Chat?', 'This cannot be undone.').then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
+        const showToast = (title, icon = 'success') => { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: title, showConfirmButton: false, timer: 3000, timerProgressBar: true, background: '#1a1a1a', color: '#fff', iconColor: '#E50914' }); };
+        const showConfirm = (title, text, confirmBtnText = 'Yes, confirm') => { return Swal.fire({ title: title, text: text, icon: 'warning', showCancelButton: true, confirmButtonColor: '#E50914', cancelButtonColor: '#333', confirmButtonText: confirmBtnText, background: '#141414', color: '#fff', iconColor: '#E50914' }); };
     </script>
 </body>
-</html>
+    </html>
