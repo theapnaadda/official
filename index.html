@@ -127,10 +127,9 @@
             transition: opacity 1s ease-in-out;
             z-index: 0;
         }
-        /* UPDATED: Mobile Slide Image Style */
         @media (max-width: 768px) {
             .slide-image {
-                object-fit: cover; /* Changed from contain to cover to fill height */
+                object-fit: cover;
                 background-position: center;
             }
         }
@@ -315,6 +314,94 @@
             border-radius: 50%;
         }
 
+        /* --- NOTIFICATION MODAL SYSTEM --- */
+        .notif-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .notif-backdrop.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .notif-box {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        .notif-backdrop.open .notif-box {
+            transform: scale(1);
+        }
+        .notif-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 14px;
+        }
+        .notif-close:hover {
+            background: var(--primary-red);
+        }
+        .aspect-16-9 {
+            aspect-ratio: 16/9;
+            width: 100%;
+            object-fit: cover;
+            display: block;
+            background-color: #000;
+        }
+        .nav-notif-btn {
+            position: relative;
+            cursor: pointer;
+            color: #aaa;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+        .nav-notif-btn:hover { color: white; }
+        .red-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-red);
+            border-radius: 50%;
+            border: 2px solid #000;
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 5px rgba(229, 9, 20, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
+        }
+
         @media (min-width: 768px) {
             .chat-widget-btn { bottom: 20px; }
             .chat-window { bottom: 90px; }
@@ -331,7 +418,7 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION (Unchanged) -->
+    <!-- TOP NAVIGATION -->
     <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
             
@@ -349,14 +436,26 @@
                 
                 <div class="h-4 w-px bg-gray-700 mx-2"></div>
 
+                <!-- NOTIFICATION ICON (DESKTOP) -->
+                <div class="nav-notif-btn" onclick="openNotificationModal()">
+                    <i class="fas fa-bell"></i>
+                    <div id="desktopNotifDot" class="red-dot hidden"></div>
+                </div>
+
                 <!-- Desktop Auth Buttons -->
                 <button id="navLoginBtn" onclick="navigateTo('login')" class="text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded text-sm font-bold transition">Login</button>
                 <button id="navDashboardBtn" onclick="navigateTo('admin')" class="hidden text-white bg-gray-800 hover:bg-gray-700 px-4 py-1.5 rounded text-sm transition">Dashboard</button>
                 <button id="navLogoutBtn" onclick="handleLogout()" class="hidden text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold">Logout</button>
             </div>
 
-            <!-- MOBILE HEADER BUTTON -->
-            <div class="md:hidden">
+            <!-- MOBILE HEADER BUTTONS -->
+            <div class="md:hidden flex items-center gap-4">
+                <!-- NOTIFICATION ICON (MOBILE) -->
+                <div class="nav-notif-btn" onclick="openNotificationModal()" style="font-size: 1.4rem; margin-right: 0;">
+                    <i class="fas fa-bell"></i>
+                    <div id="mobileNotifDot" class="red-dot hidden"></div>
+                </div>
+
                 <button id="mobileHeaderLoginBtn" onclick="navigateTo('login')" class="glow-btn text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-lg hidden">
                     LOGIN <i class="fas fa-sign-in-alt ml-1"></i>
                 </button>
@@ -364,12 +463,23 @@
         </div>
     </nav>
 
+    <!-- NOTIFICATION MODAL OVERLAY -->
+    <div id="notificationModal" class="notif-backdrop" onclick="closeNotificationModal(event)">
+        <div class="notif-box" onclick="event.stopPropagation()"> <!-- Stop click from closing when clicking inside box -->
+            <div class="notif-close" onclick="closeNotificationModal(event)"><i class="fas fa-times"></i></div>
+            
+            <!-- Dynamic Content -->
+            <div id="notifContentImage"></div>
+            <div id="notifContentText" class="p-6 text-center text-gray-200"></div>
+        </div>
+    </div>
+
     <!-- MAIN CONTENT AREA -->
     <main class="flex-grow container mx-auto px-4 py-6 md:py-8">
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
-            <!-- UPDATED HERO SECTION CONTAINER FOR MOBILE -->
+            <!-- HERO SECTION -->
             <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh]">
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
                 <div class="hero-overlay"></div>
@@ -406,10 +516,9 @@
             <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
         </div>
 
-        <!-- 3. PROFILE SECTION (Restored Original) -->
+        <!-- 3. PROFILE SECTION -->
         <div id="section-profile" class="hidden-section animate-fade-in">
             <div class="max-w-lg mx-auto">
-                <!-- Profile Header / Auth State -->
                 <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center">
                     <div id="profileLoggedOut" class="hidden">
                         <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-gray-600">
@@ -438,7 +547,7 @@
                     </div>
                 </div>
 
-                <!-- Accordions (About/Contact/etc for mobile) -->
+                <!-- Accordions -->
                 <div class="space-y-3">
                     <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
                         <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-about', this)">
@@ -529,29 +638,19 @@
             </div>
         </div>
 
-        <!-- 8. LOGIN / SIGNUP SECTION (MODIFIED: SLIDING TABS) -->
+        <!-- 8. LOGIN / SIGNUP SECTION -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
             <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
-                
-                <!-- Google Login Button -->
                 <button onclick="handleGoogleLogin()" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition flex items-center justify-center gap-3 mb-6">
                     <i class="fab fa-google text-red-600 text-lg"></i> Continue with Google
                 </button>
 
-                <div class="flex items-center mb-6">
-                    <div class="flex-grow h-px bg-gray-700"></div>
-                    <span class="px-3 text-gray-500 text-xs uppercase">OR</span>
-                    <div class="flex-grow h-px bg-gray-700"></div>
-                </div>
-
-                <!-- SLIDING TABS -->
                 <div class="auth-tabs">
                     <div class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">LOGIN</div>
                     <div class="auth-tab-btn" id="tab-signup" onclick="switchAuthTab('signup')">SIGNUP</div>
                     <div class="auth-glider" id="authGlider"></div>
                 </div>
 
-                <!-- LOGIN FORM -->
                 <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="auth-form-block">
                     <h3 class="text-white font-bold mb-4 text-xl">Welcome Back</h3>
                     <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="loginEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
@@ -559,7 +658,6 @@
                     <button type="submit" id="loginBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">LOGIN</button>
                 </form>
 
-                <!-- SIGNUP FORM -->
                 <form id="signupForm" onsubmit="handleSignupSubmit(event)" class="auth-form-block hidden">
                     <h3 class="text-white font-bold mb-4 text-xl">Create Account</h3>
                     <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="signupEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
@@ -600,13 +698,10 @@
                                 <option value="months">In X Months</option>
                                 <option value="hours">In X Hours (Countdown)</option>
                                 <option value="countdown">Live Countdown (Min:Sec)</option>
-                                
-                                <!-- NEW STATUS OPTIONS -->
                                 <option value="relaunch_date">RELAUNCH SPECIFIC DATE</option>
                                 <option value="relaunch_weeks">RELAUNCH SPECIFIC WEEK</option>
                                 <option value="relaunch_hours">RELAUNCH IN X HOURS (RUNNING)</option>
                                 <option value="relaunch_countdown">RELAUNCH COUNTDOWN</option>
-                                
                                 <option value="error">ERROR IN WEBSITE</option>
                                 <option value="emergency">EMERGENCY LAUNCH</option>
                                 <option value="none">No Status Badge</option>
@@ -629,7 +724,6 @@
                         <div id="hoursField" class="mb-3 hidden">
                             <label class="text-xs text-gray-400 block mb-1">Number of Hours</label>
                             <input type="number" id="statusHours" class="w-full p-2 rounded" placeholder="e.g. 17">
-                            <p class="text-[10px] text-gray-500 mt-1">Countdown starts from now.</p>
                         </div>
                         <div id="countdownField" class="mb-3 hidden">
                             <div class="p-2 bg-gray-800 rounded border border-gray-700 mb-2">
@@ -672,7 +766,27 @@
                     </div>
                 </div>
 
-                <!-- 4. Support (Full) -->
+                <!-- 4. Notification Center (NEW) -->
+                <div class="lg:col-span-6 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-white"><i class="fas fa-bell text-red-600 mr-2"></i> Notification Center</h3>
+                        <button onclick="deleteNotification()" class="text-xs text-red-500 hover:text-white border border-red-900 px-2 py-1 rounded">Clear Alert</button>
+                    </div>
+                    <form onsubmit="sendNotification(event)" class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Notification Text</label>
+                            <textarea id="notifText" class="w-full p-2 rounded h-20" placeholder="Type message..."></textarea>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">Image (16:9)</label>
+                            <input type="file" id="notifImage" class="w-full text-xs text-gray-400" accept="image/*">
+                        </div>
+                        <button type="submit" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200">SEND NOTIFICATION</button>
+                        <p class="text-[10px] text-gray-500">Will trigger a red dot on user headers.</p>
+                    </form>
+                </div>
+
+                <!-- 5. Support (Full) -->
                 <div class="lg:col-span-12 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden mt-2">
                     <div class="p-4 bg-black border-b border-gray-800 flex justify-between">
                         <h3 class="font-bold text-white">Support Messages</h3>
@@ -778,6 +892,7 @@
         let countdownInterval = null;
         let currentUserEmail = null;
         let currentAdminChatUser = null;
+        let currentNotification = null; // Store fetched notification
         const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'profile', 'privacy', 'disclaimer'];
 
         // 3. INIT & NAVIGATION
@@ -786,6 +901,7 @@
             if(savedSection !== 'admin') navigateTo(savedSection, true); 
             fetchApps();
             fetchSlides();
+            initNotifications(); // START LISTENING FOR NOTIFICATIONS
         };
 
         function navigateTo(sectionId, isInitialLoad = false) {
@@ -841,6 +957,140 @@
                 content.style.maxHeight = content.scrollHeight + "px";
             }
         }
+
+        // ============================================
+        // NOTIFICATION LOGIC (NEW)
+        // ============================================
+        
+        // 1. Listen for changes in Firebase
+        function initNotifications() {
+            db.ref('system_notification').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.active) {
+                    currentNotification = data;
+                    checkIfSeen(data.timestamp);
+                } else {
+                    currentNotification = null;
+                    hideRedDots();
+                }
+            });
+        }
+
+        // 2. Check LocalStorage to see if already viewed
+        function checkIfSeen(timestamp) {
+            const lastSeenTime = localStorage.getItem('apnaAddaLastNotifTime');
+            // If saved time is less than current notification time, or no saved time
+            if (!lastSeenTime || parseInt(lastSeenTime) < timestamp) {
+                showRedDots();
+            } else {
+                hideRedDots();
+            }
+        }
+
+        function showRedDots() {
+            document.getElementById('desktopNotifDot').classList.remove('hidden');
+            document.getElementById('mobileNotifDot').classList.remove('hidden');
+        }
+
+        function hideRedDots() {
+            document.getElementById('desktopNotifDot').classList.add('hidden');
+            document.getElementById('mobileNotifDot').classList.add('hidden');
+        }
+
+        // 3. Open Modal
+        function openNotificationModal() {
+            if (!currentNotification) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'info',
+                    title: 'No new notifications',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    background: '#1a1a1a',
+                    color: '#fff'
+                });
+                return;
+            }
+
+            // Populate Modal
+            const imgContainer = document.getElementById('notifContentImage');
+            const textContainer = document.getElementById('notifContentText');
+            
+            imgContainer.innerHTML = '';
+            textContainer.innerHTML = '';
+
+            if (currentNotification.image) {
+                imgContainer.innerHTML = `<img src="${currentNotification.image}" class="aspect-16-9">`;
+            }
+            
+            if (currentNotification.text) {
+                textContainer.innerText = currentNotification.text;
+                textContainer.style.display = 'block';
+            } else {
+                textContainer.style.display = 'none';
+            }
+
+            // Show Modal
+            document.getElementById('notificationModal').classList.add('open');
+
+            // Mark as seen
+            localStorage.setItem('apnaAddaLastNotifTime', currentNotification.timestamp);
+            hideRedDots();
+        }
+
+        // 4. Close Modal
+        function closeNotificationModal(e) {
+            document.getElementById('notificationModal').classList.remove('open');
+        }
+
+        // 5. Admin: Send Notification
+        async function sendNotification(e) {
+            e.preventDefault();
+            const text = document.getElementById('notifText').value.trim();
+            const file = document.getElementById('notifImage').files[0];
+
+            if (!text && !file) {
+                showToast('Please add text or an image.', 'warning');
+                return;
+            }
+
+            let imgBase64 = '';
+            if (file) {
+                try {
+                    imgBase64 = await compressImage(file);
+                } catch (err) {
+                    showToast('Image error', 'error');
+                    return;
+                }
+            }
+
+            const payload = {
+                text: text,
+                image: imgBase64,
+                timestamp: Date.now(),
+                active: true
+            };
+
+            db.ref('system_notification').set(payload)
+                .then(() => {
+                    showToast('Notification sent!', 'success');
+                    document.getElementById('notifText').value = '';
+                    document.getElementById('notifImage').value = '';
+                })
+                .catch(err => showToast(err.message, 'error'));
+        }
+
+        // 6. Admin: Delete Notification
+        function deleteNotification() {
+            showConfirm('Clear Notification?', 'This will remove the alert for all users.').then(res => {
+                if(res.isConfirmed) {
+                    db.ref('system_notification').remove()
+                    .then(() => showToast('Notification cleared.', 'info'));
+                }
+            });
+        }
+
 
         // ============================================
         // CUSTOM ALERTS & HELPERS
