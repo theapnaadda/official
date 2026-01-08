@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APNA ADDA</title>
+    <title>APNA ADDA - Winter Update</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,6 +25,7 @@
     <style>
         :root {
             --primary-red: #E50914; 
+            --winter-blue: #a8d5e5;
             --dark-black: #000000;
             --dark-gray: #141414;
             --light-text: #ffffff;
@@ -43,6 +44,46 @@
         @media(min-width: 768px) {
             body { padding-bottom: 0; }
         }
+
+        /* --- WINTER UPDATE CSS START --- */
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: #fff;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #000;
+            user-select: none;
+            z-index: 9999;
+            pointer-events: none;
+            animation-name: fall, shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+        }
+
+        @keyframes fall {
+            0% { top: -10%; }
+            100% { top: 100%; }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0px); }
+            50% { transform: translateX(40px); }
+            100% { transform: translateX(0px); }
+        }
+
+        .frost-glass {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .winter-glow-text {
+            text-shadow: 0 0 10px rgba(168, 213, 229, 0.5);
+        }
+        /* --- WINTER UPDATE CSS END --- */
 
         /* Animations */
         @keyframes fadeIn {
@@ -142,8 +183,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
             z-index: 1;
+            pointer-events: none;
+        }
+        /* Winter overlay specifically for hero */
+        .winter-hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.9) 100%);
+            z-index: 2;
             pointer-events: none;
         }
 
@@ -418,13 +467,16 @@
 </head>
 <body>
 
+    <!-- WINTER SNOW CONTAINER -->
+    <div id="snow-container"></div>
+
     <!-- TOP NAVIGATION -->
     <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
             
             <!-- LOGO -->
-            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
-                APNA ADDA
+            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer flex items-center gap-2" onclick="navigateTo('home')">
+                APNA ADDA <span class="text-sm text-blue-300 font-normal opacity-70"><i class="far fa-snowflake"></i></span>
             </div>
 
             <!-- DESKTOP MENU -->
@@ -475,20 +527,28 @@
     </div>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="flex-grow container mx-auto px-4 py-6 md:py-8">
+    <main class="flex-grow container mx-auto px-4 py-6 md:py-8 relative z-10">
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
             <!-- HERO SECTION -->
-            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh]">
+            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh] shadow-2xl">
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
+                <!-- Winter Overlay -->
                 <div class="hero-overlay"></div>
+                <div class="winter-hero-overlay"></div>
+                
                 <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
+                    <!-- Winter Badge -->
+                    <div class="mb-4 bg-blue-500/20 border border-blue-400/50 px-4 py-1 rounded-full backdrop-blur-sm">
+                        <span class="text-blue-200 text-xs font-bold tracking-widest"><i class="fas fa-snowflake mr-2"></i> WINTER EDITION</span>
+                    </div>
+
+                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-2xl winter-glow-text">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
-                    <p class="text-xl md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-10 md:mb-10 drop-shadow-md">
-                        Technology for Everyday Growth.
+                    <p class="text-xl md:text-xl lg:text-2xl text-blue-100 font-light tracking-wide max-w-2xl mx-auto mb-10 md:mb-10 drop-shadow-md">
+                        Experience the Winter Update. <br class="md:hidden">Technology designed for you.
                     </p>
                     <button onclick="scrollToHomeApps()" class="px-8 py-4 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-lg md:text-base cursor-pointer pointer-events-auto">
                         EXPLORE APPS
@@ -496,7 +556,7 @@
                 </div>
             </div>
 
-            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900">
+            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900 relative">
                 <div class="text-center mb-8 md:mb-10">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
                 </div>
@@ -520,7 +580,7 @@
         <!-- 3. PROFILE SECTION -->
         <div id="section-profile" class="hidden-section animate-fade-in">
             <div class="max-w-lg mx-auto">
-                <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center">
+                <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center frost-glass">
                     <div id="profileLoggedOut" class="hidden">
                         <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-gray-600">
                             <i class="fas fa-user"></i>
@@ -604,7 +664,7 @@
 
         <!-- 4. ABOUT SECTION (Desktop) -->
         <div id="section-about" class="hidden-section hidden md:block">
-             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
+             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl frost-glass">
                 <h2 class="text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
                 <div class="space-y-4 text-gray-300 leading-relaxed text-justify">
                     <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life.</p>
@@ -616,8 +676,8 @@
         <!-- 5. CONTACT SECTION (Desktop) -->
         <div id="section-contact" class="hidden-section hidden md:block">
              <div class="flex flex-col items-center justify-center min-h-[50vh]">
-                <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
-                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
+                <h2 class="text-4xl font-bold mb-8 winter-glow-text">Get In Touch</h2>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center frost-glass">
                     <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-3 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded shadow transition">
                         <i class="fas fa-envelope"></i> Email Us
                     </a>
@@ -641,7 +701,7 @@
 
         <!-- 8. LOGIN / SIGNUP SECTION -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
-            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
+            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2 frost-glass">
                 <button onclick="handleGoogleLogin()" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition flex items-center justify-center gap-3 mb-6">
                     <i class="fab fa-google text-red-600 text-lg"></i> Continue with Google
                 </button>
@@ -918,7 +978,29 @@
             fetchApps();
             fetchSlides();
             initNotifications(); 
+            initWinterMode(); // Trigger Snow
         };
+
+        // --- WINTER MODE LOGIC ---
+        function initWinterMode() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflakeCount = 30; // Limit for performance on mobile
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.innerHTML = '❄';
+                
+                // Randomize positions and speed
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.opacity = Math.random() * 0.7 + 0.3;
+                flake.style.animationDuration = (Math.random() * 5 + 5) + 's'; // Fall speed
+                flake.style.fontSize = (Math.random() * 15 + 10) + 'px'; // Size
+                flake.style.animationDelay = (Math.random() * 5) + 's'; // Delay start so they don't all fall at once
+
+                snowContainer.appendChild(flake);
+            }
+        }
 
         function navigateTo(sectionId, isInitialLoad = false) {
             if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
