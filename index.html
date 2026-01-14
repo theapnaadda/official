@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APNA ADDA - Winter Update</title>
+    <title>APNA ADDA</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,7 +25,6 @@
     <style>
         :root {
             --primary-red: #E50914; 
-            --winter-blue: #a8d5e5;
             --dark-black: #000000;
             --dark-gray: #141414;
             --light-text: #ffffff;
@@ -44,46 +43,6 @@
         @media(min-width: 768px) {
             body { padding-bottom: 0; }
         }
-
-        /* --- WINTER UPDATE CSS START --- */
-        .snowflake {
-            position: fixed;
-            top: -20px;
-            color: #fff;
-            font-size: 1em;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 5px #000;
-            user-select: none;
-            z-index: 9999;
-            pointer-events: none;
-            animation-name: fall, shake;
-            animation-duration: 10s, 3s;
-            animation-timing-function: linear, ease-in-out;
-            animation-iteration-count: infinite, infinite;
-        }
-
-        @keyframes fall {
-            0% { top: -10%; }
-            100% { top: 100%; }
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0px); }
-            50% { transform: translateX(40px); }
-            100% { transform: translateX(0px); }
-        }
-
-        .frost-glass {
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .winter-glow-text {
-            text-shadow: 0 0 10px rgba(168, 213, 229, 0.5);
-        }
-        /* --- WINTER UPDATE CSS END --- */
 
         /* Animations */
         @keyframes fadeIn {
@@ -183,16 +142,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
             z-index: 1;
-            pointer-events: none;
-        }
-        /* Winter overlay specifically for hero */
-        .winter-hero-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.9) 100%);
-            z-index: 2;
             pointer-events: none;
         }
 
@@ -363,7 +314,7 @@
             border-radius: 50%;
         }
 
-        /* Notifications */
+        /* Notifications & Modal */
         .notif-backdrop {
             position: fixed;
             top: 0;
@@ -389,42 +340,79 @@
             border: 1px solid #333;
             border-radius: 12px;
             width: 90%;
-            max-width: 400px;
+            max-width: 450px;
+            max-height: 80vh; /* Fixed height for scroll */
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             transform: scale(0.9);
             transition: transform 0.3s ease;
-            overflow: hidden;
+            overflow: hidden; /* Hide outer overflow */
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
         .notif-backdrop.open .notif-box {
             transform: scale(1);
         }
-        .notif-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+        .notif-header {
+            padding: 15px;
+            border-bottom: 1px solid #333;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            background: #222;
+        }
+        .notif-close {
             cursor: pointer;
-            z-index: 10;
-            font-size: 14px;
+            color: #aaa;
+            font-size: 1.2rem;
+            transition: color 0.3s;
         }
         .notif-close:hover {
-            background: var(--primary-red);
+            color: white;
         }
-        .notif-img-display {
+        
+        /* New Scrollable List Styles */
+        #notificationList {
+            overflow-y: auto;
+            flex: 1;
+            padding: 0;
+        }
+        .notif-item {
+            border-bottom: 1px solid #333;
+            padding: 20px;
+            background: #1a1a1a;
+            transition: background 0.2s;
+        }
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+        .notif-item:hover {
+            background: #222;
+        }
+        .notif-list-img {
             width: 100%;
+            height: auto;
             max-height: 250px;
-            object-fit: contain; 
-            display: block;
-            background-color: #000;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
         }
+        .notif-text-content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ddd;
+            white-space: pre-wrap; /* Keeps line breaks */
+        }
+        .notif-date {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 10px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* Nav Dots */
         .nav-notif-btn {
             position: relative;
             cursor: pointer;
@@ -463,20 +451,116 @@
                 height: 50vh;
             }
         }
+
+        /* --- MAKAR SANKRANTI SPECIAL --- */
+        .sankranti-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .sankranti-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .sankranti-content {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 2px solid #FFD700; /* Gold Border */
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .sankranti-modal.active .sankranti-content {
+            transform: scale(1);
+        }
+        .floating-kite {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            transform: rotate(45deg);
+            bottom: -50px;
+            z-index: 2900;
+            pointer-events: none;
+            border-top-left-radius: 4px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            animation: flyUp 8s linear forwards;
+        }
+        .floating-kite::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            width: 2px;
+            height: 30px;
+            background: rgba(255,255,255,0.6);
+            transform: rotate(-45deg);
+        }
+
+        @keyframes flyUp {
+            0% { bottom: -50px; opacity: 1; transform: translateX(0) rotate(45deg); }
+            100% { bottom: 110vh; opacity: 0; transform: translateX(100px) rotate(60deg); }
+        }
     </style>
 </head>
 <body>
+    
+    <!-- MAKAR SANKRANTI POPUP -->
+    <div id="sankrantiModal" class="sankranti-modal" onclick="closeSankranti()">
+        <div class="sankranti-content" onclick="event.stopPropagation()">
+            <!-- Decoration Circles -->
+            <div class="absolute -top-10 -right-10 w-20 h-20 bg-yellow-500 rounded-full blur-xl opacity-20"></div>
+            <div class="absolute -bottom-10 -left-10 w-20 h-20 bg-orange-500 rounded-full blur-xl opacity-20"></div>
+            
+            <h2 class="text-3xl font-black text-yellow-500 mb-2">HAPPY</h2>
+            <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 mb-4" style="line-height: 1.2;">MAKAR SANKRANTI</h1>
+            
+            <div class="my-6 flex justify-center">
+                <!-- Simple Kite Illustration -->
+                <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-yellow-500 rotate-45 rounded-tl-md rounded-br-3xl shadow-lg relative border border-white/20">
+                    <div class="absolute bottom-[-10px] right-[-10px] w-1 h-8 bg-white/50 -rotate-45"></div>
+                </div>
+            </div>
 
-    <!-- WINTER SNOW CONTAINER -->
-    <div id="snow-container"></div>
+            <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                May this festival bring you new opportunities, happiness, and the soaring success of a kite high in the sky!
+                <br><br>
+                <strong class="text-white">- Team APNA ADDA</strong>
+            </p>
+
+            <button onclick="closeSankranti()" class="bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transition shadow-lg border border-orange-400/30">
+                Start Celebration
+            </button>
+        </div>
+    </div>
+    <!-- Container for Kites -->
+    <div id="kiteContainer"></div>
 
     <!-- TOP NAVIGATION -->
     <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
             
             <!-- LOGO -->
-            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer flex items-center gap-2" onclick="navigateTo('home')">
-                APNA ADDA <span class="text-sm text-blue-300 font-normal opacity-70"><i class="far fa-snowflake"></i></span>
+            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
+                APNA ADDA
             </div>
 
             <!-- DESKTOP MENU -->
@@ -515,40 +599,37 @@
         </div>
     </nav>
 
-    <!-- NOTIFICATION MODAL OVERLAY (USER VIEW) -->
+    <!-- UPDATED NOTIFICATION MODAL (VERTICAL LIST) -->
     <div id="notificationModal" class="notif-backdrop" onclick="closeNotificationModal(event)">
         <div class="notif-box" onclick="event.stopPropagation()">
-            <div class="notif-close" onclick="closeNotificationModal(event)"><i class="fas fa-times"></i></div>
+            <!-- Modal Header -->
+            <div class="notif-header">
+                <h3 class="text-white font-bold text-lg"><i class="fas fa-bell text-red-600 mr-2"></i> Notifications</h3>
+                <div class="notif-close" onclick="closeNotificationModal(event)"><i class="fas fa-times"></i></div>
+            </div>
             
-            <!-- Dynamic Content -->
-            <div id="notifContentImage"></div>
-            <div id="notifContentText" class="p-6 text-center text-gray-200"></div>
+            <!-- Dynamic Scrollable List -->
+            <div id="notificationList">
+                <!-- Content injected via JS -->
+            </div>
         </div>
     </div>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="flex-grow container mx-auto px-4 py-6 md:py-8 relative z-10">
+    <main class="flex-grow container mx-auto px-4 py-6 md:py-8">
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
             <!-- HERO SECTION -->
-            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh] shadow-2xl">
+            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh]">
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
-                <!-- Winter Overlay -->
                 <div class="hero-overlay"></div>
-                <div class="winter-hero-overlay"></div>
-                
                 <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-                    <!-- Winter Badge -->
-                    <div class="mb-4 bg-blue-500/20 border border-blue-400/50 px-4 py-1 rounded-full backdrop-blur-sm">
-                        <span class="text-blue-200 text-xs font-bold tracking-widest"><i class="fas fa-snowflake mr-2"></i> WINTER EDITION</span>
-                    </div>
-
-                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-2xl winter-glow-text">
+                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
-                    <p class="text-xl md:text-xl lg:text-2xl text-blue-100 font-light tracking-wide max-w-2xl mx-auto mb-10 md:mb-10 drop-shadow-md">
-                        Experience the Winter Update. <br class="md:hidden">Technology designed for you.
+                    <p class="text-xl md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-10 md:mb-10 drop-shadow-md">
+                        Technology for Everyday Growth.
                     </p>
                     <button onclick="scrollToHomeApps()" class="px-8 py-4 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-lg md:text-base cursor-pointer pointer-events-auto">
                         EXPLORE APPS
@@ -556,7 +637,7 @@
                 </div>
             </div>
 
-            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900 relative">
+            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900">
                 <div class="text-center mb-8 md:mb-10">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
                 </div>
@@ -580,7 +661,7 @@
         <!-- 3. PROFILE SECTION -->
         <div id="section-profile" class="hidden-section animate-fade-in">
             <div class="max-w-lg mx-auto">
-                <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center frost-glass">
+                <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center">
                     <div id="profileLoggedOut" class="hidden">
                         <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-gray-600">
                             <i class="fas fa-user"></i>
@@ -664,7 +745,7 @@
 
         <!-- 4. ABOUT SECTION (Desktop) -->
         <div id="section-about" class="hidden-section hidden md:block">
-             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl frost-glass">
+             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
                 <h2 class="text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
                 <div class="space-y-4 text-gray-300 leading-relaxed text-justify">
                     <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life.</p>
@@ -676,8 +757,8 @@
         <!-- 5. CONTACT SECTION (Desktop) -->
         <div id="section-contact" class="hidden-section hidden md:block">
              <div class="flex flex-col items-center justify-center min-h-[50vh]">
-                <h2 class="text-4xl font-bold mb-8 winter-glow-text">Get In Touch</h2>
-                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center frost-glass">
+                <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
                     <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-3 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded shadow transition">
                         <i class="fas fa-envelope"></i> Email Us
                     </a>
@@ -701,7 +782,7 @@
 
         <!-- 8. LOGIN / SIGNUP SECTION -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
-            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2 frost-glass">
+            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
                 <button onclick="handleGoogleLogin()" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition flex items-center justify-center gap-3 mb-6">
                     <i class="fab fa-google text-red-600 text-lg"></i> Continue with Google
                 </button>
@@ -848,7 +929,7 @@
                             <button type="submit" id="notifSubmitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200 text-sm">SEND</button>
                             <button type="button" onclick="resetNotifForm()" class="px-3 border border-gray-600 rounded text-white text-sm">Reset</button>
                         </div>
-                        <p class="text-[10px] text-gray-500">Will trigger a red dot. Users see the latest alert.</p>
+                        <p class="text-[10px] text-gray-500">Will trigger a red dot. Users see list sorted by date.</p>
                     </form>
 
                     <!-- History List -->
@@ -968,7 +1049,6 @@
         let countdownInterval = null;
         let currentUserEmail = null;
         let currentAdminChatUser = null;
-        let currentNotification = null; 
         const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'profile', 'privacy', 'disclaimer'];
 
         // 3. INIT & NAVIGATION
@@ -978,29 +1058,10 @@
             fetchApps();
             fetchSlides();
             initNotifications(); 
-            initWinterMode(); // Trigger Snow
+            
+            // Sankranti Init
+            initSankranti();
         };
-
-        // --- WINTER MODE LOGIC ---
-        function initWinterMode() {
-            const snowContainer = document.getElementById('snow-container');
-            const snowflakeCount = 30; // Limit for performance on mobile
-
-            for (let i = 0; i < snowflakeCount; i++) {
-                const flake = document.createElement('div');
-                flake.className = 'snowflake';
-                flake.innerHTML = '❄';
-                
-                // Randomize positions and speed
-                flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.opacity = Math.random() * 0.7 + 0.3;
-                flake.style.animationDuration = (Math.random() * 5 + 5) + 's'; // Fall speed
-                flake.style.fontSize = (Math.random() * 15 + 10) + 'px'; // Size
-                flake.style.animationDelay = (Math.random() * 5) + 's'; // Delay start so they don't all fall at once
-
-                snowContainer.appendChild(flake);
-            }
-        }
 
         function navigateTo(sectionId, isInitialLoad = false) {
             if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
@@ -1033,10 +1094,8 @@
             if (!isActive) { btn.classList.add('active'); content.style.maxHeight = content.scrollHeight + "px"; }
         }
 
-        // --- IMAGE COMPRESSOR & BASE64 CONVERTER ---
-        // This function auto-resizes and compresses images to be under ~1MB
+        // --- IMAGE COMPRESSOR ---
         const compressAndConvertToBase64 = async (file) => {
-            // 1. If file is small (< 1MB), just standard conversion
             if (file.size < 1024 * 1024) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -1045,8 +1104,6 @@
                     reader.readAsDataURL(file);
                 });
             }
-
-            // 2. If larger, we compress
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -1057,8 +1114,6 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        
-                        // Resize logic: Max dimension 1280px (Good balance for web)
                         const MAX_DIMENSION = 1280; 
                         if (width > height) {
                             if (width > MAX_DIMENSION) {
@@ -1071,22 +1126,16 @@
                                 height = MAX_DIMENSION;
                             }
                         }
-
                         canvas.width = width;
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-
-                        // Compress loop: Reduce quality until < 1MB
-                        // Note: toDataURL header adds size, so we target ~900KB
                         let quality = 0.9;
                         let base64 = canvas.toDataURL('image/jpeg', quality);
-
                         while (base64.length * 0.75 > 900 * 1024 && quality > 0.1) {
                             quality -= 0.1;
                             base64 = canvas.toDataURL('image/jpeg', quality);
                         }
-                        
                         resolve(base64);
                     };
                     img.onerror = (err) => reject(err);
@@ -1098,7 +1147,6 @@
         // ============================================
         // APP LOGIC
         // ============================================
-
         function fetchApps() { 
             const loader = document.getElementById('homeLoader');
             if(loader) loader.style.display = 'block';
@@ -1179,31 +1227,20 @@
             updateTimers(); countdownInterval = setInterval(updateTimers, 1000);
         }
 
-        // --- FIXED APP SUBMIT LOGIC (AUTO COMPRESS) ---
         async function handleAppSubmit(e) {
             e.preventDefault();
             const id = document.getElementById('editAppId').value;
             const f = document.getElementById('appImage').files[0];
             const btn = document.getElementById('submitBtn');
             const originalText = btn.innerText;
-
             let imageBase64 = '';
-            
             if (f) {
                 btn.innerText = "Compressing...";
-                try {
-                    // Auto compress > 1MB images
-                    imageBase64 = await compressAndConvertToBase64(f);
-                } catch(err) {
-                    showToast('Error processing image', 'error');
-                    btn.innerText = originalText;
-                    return;
-                }
+                try { imageBase64 = await compressAndConvertToBase64(f); } catch(err) { showToast('Error processing image', 'error'); btn.innerText = originalText; return; }
             } else if (id) {
                 const o = allApps.find(x => x.id === id); 
                 if (o) imageBase64 = o.image;
             }
-
             const statusType = document.getElementById('launchStatus').value;
             let detail = '';
             if (statusType.includes('date')) detail = document.getElementById('statusDate').value;
@@ -1212,32 +1249,10 @@
             else if (statusType.includes('hours')) { const h = parseFloat(document.getElementById('statusHours').value); if (!isNaN(h)) { detail = new Date(Date.now() + h * 60 * 60 * 1000).toISOString(); } }
             else if (statusType.includes('countdown')) detail = document.getElementById('statusCountdown').value;
 
-            const p = { 
-                name: document.getElementById('appName').value, 
-                status: statusType, 
-                statusDetail: detail, 
-                link: document.getElementById('appLink').value, 
-                image: imageBase64 || '' 
-            };
-
+            const p = { name: document.getElementById('appName').value, status: statusType, statusDetail: detail, link: document.getElementById('appLink').value, image: imageBase64 || '' };
             btn.innerText = "SAVING...";
-            
             const promise = id ? db.ref('apps/' + id).update(p) : db.ref('apps').push(p);
-            
-            promise.then(() => {
-                showToast(id ? 'App updated!' : 'App added!', 'success');
-                resetForm();
-            }).catch((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Save Failed',
-                    text: error.message,
-                    background: '#1a1a1a',
-                    color: '#fff'
-                });
-            }).finally(() => {
-                btn.innerText = originalText;
-            });
+            promise.then(() => { showToast(id ? 'App updated!' : 'App added!', 'success'); resetForm(); }).catch((error) => { Swal.fire({ icon: 'error', title: 'Save Failed', text: error.message, background: '#1a1a1a', color: '#fff' }); }).finally(() => { btn.innerText = originalText; });
         }
         
         function toggleStatusFields() {
@@ -1253,41 +1268,73 @@
         function editApp(id) { const a = allApps.find(x => x.id === id); if (!a) return; document.getElementById('editAppId').value = a.id; document.getElementById('appName').value = a.name; document.getElementById('launchStatus').value = a.status; document.getElementById('appLink').value = a.link || ''; toggleStatusFields(); if (a.status.includes('date')) document.getElementById('statusDate').value = a.statusDetail; if (a.status.includes('weeks')) document.getElementById('statusWeeks').value = a.statusDetail; if (a.status.includes('months')) document.getElementById('statusMonths').value = a.statusDetail; if (a.status.includes('hours')) { const remainingHours = (new Date(a.statusDetail).getTime() - new Date().getTime()) / (1000 * 60 * 60); document.getElementById('statusHours').value = remainingHours > 0 ? remainingHours.toFixed(2) : 0; } if (a.status.includes('countdown')) document.getElementById('statusCountdown').value = a.statusDetail; showToast('Editing: ' + a.name, 'info'); }
         function resetForm(){ document.getElementById('appForm').reset(); document.getElementById('editAppId').value=''; toggleStatusFields(); }
 
-        // --- SLIDESHOW LOGIC (AUTO COMPRESS) ---
+        // --- SLIDESHOW LOGIC ---
         function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black p-2 border border-gray-700 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="deleteSlide('${x.id}')" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
-        
-        async function uploadSlide(){
-            const f=document.getElementById('slideUploadInput').files[0]; 
-            const btn = document.getElementById('slideUploadBtn');
-            
-            if(f){
-                btn.innerText = "Processing...";
-                try {
-                    // Auto compress here too
-                    const base64 = await compressAndConvertToBase64(f);
-                    db.ref('slides').push({image: base64});
-                    showToast('Slide uploaded successfully!');
-                    document.getElementById('slideUploadInput').value = '';
-                } catch(e) { 
-                    showToast('Slide upload failed', 'error'); 
-                }
-                btn.innerText = "Upload";
-            }
-        }
+        async function uploadSlide(){ const f=document.getElementById('slideUploadInput').files[0]; const btn = document.getElementById('slideUploadBtn'); if(f){ btn.innerText = "Processing..."; try { const base64 = await compressAndConvertToBase64(f); db.ref('slides').push({image: base64}); showToast('Slide uploaded successfully!'); document.getElementById('slideUploadInput').value = ''; } catch(e) { showToast('Slide upload failed', 'error'); } btn.innerText = "Upload"; } }
         function deleteSlide(id) { showConfirm('Delete Slide?', 'Remove from slideshow?').then((result) => { if (result.isConfirmed) { db.ref('slides/' + id).remove(); showToast('Slide deleted', 'info'); } }); }
 
-        // --- NOTIFICATION LOGIC (AUTO COMPRESS) ---
+        // --- UPDATED NOTIFICATION LOGIC (VERTICAL SCROLL) ---
         function initNotifications() {
             db.ref('system_notifications').limitToLast(20).on('value', (snapshot) => {
-                const data = snapshot.val(); allNotifications = [];
-                if (data) { Object.keys(data).forEach(key => allNotifications.push({ id: key, ...data[key] })); allNotifications.sort((a, b) => b.timestamp - a.timestamp); if (allNotifications.length > 0) { currentNotification = allNotifications[0]; checkIfSeen(currentNotification.timestamp); } else { currentNotification = null; hideRedDots(); } } else { currentNotification = null; hideRedDots(); }
+                const data = snapshot.val();
+                allNotifications = [];
+                if (data) {
+                    Object.keys(data).forEach(key => allNotifications.push({ id: key, ...data[key] }));
+                    // Sort Newest First
+                    allNotifications.sort((a, b) => b.timestamp - a.timestamp);
+                    // Check red dot based on latest
+                    if(allNotifications.length > 0) checkIfSeen(allNotifications[0].timestamp);
+                    else hideRedDots();
+                } else {
+                    hideRedDots();
+                }
                 renderAdminNotifications();
             });
         }
-        function checkIfSeen(timestamp) { const lastSeenTime = localStorage.getItem('apnaAddaLastNotifTime'); if (!lastSeenTime || parseInt(lastSeenTime) < timestamp) { showRedDots(); } else { hideRedDots(); } }
+
+        function checkIfSeen(timestamp) { 
+            const lastSeenTime = localStorage.getItem('apnaAddaLastNotifTime'); 
+            if (!lastSeenTime || parseInt(lastSeenTime) < timestamp) showRedDots();
+            else hideRedDots();
+        }
         function showRedDots() { document.getElementById('desktopNotifDot').classList.remove('hidden'); document.getElementById('mobileNotifDot').classList.remove('hidden'); }
         function hideRedDots() { document.getElementById('desktopNotifDot').classList.add('hidden'); document.getElementById('mobileNotifDot').classList.add('hidden'); }
-        function openNotificationModal() { if (!currentNotification) { Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No new notifications', showConfirmButton: false, timer: 2000, background: '#1a1a1a', color: '#fff' }); return; } const imgContainer = document.getElementById('notifContentImage'); const textContainer = document.getElementById('notifContentText'); imgContainer.innerHTML = ''; textContainer.innerHTML = ''; if (currentNotification.image) { imgContainer.innerHTML = `<img src="${currentNotification.image}" class="notif-img-display">`; } if (currentNotification.text) { textContainer.innerText = currentNotification.text; textContainer.style.display = 'block'; } else { textContainer.style.display = 'none'; } document.getElementById('notificationModal').classList.add('open'); localStorage.setItem('apnaAddaLastNotifTime', currentNotification.timestamp); hideRedDots(); }
+        
+        // Open Modal and Render Vertical List
+        function openNotificationModal() { 
+            const list = document.getElementById('notificationList');
+            list.innerHTML = '';
+
+            if (!allNotifications || allNotifications.length === 0) { 
+                list.innerHTML = '<div class="p-8 text-center text-gray-500">No notifications yet.</div>';
+                document.getElementById('notificationModal').classList.add('open');
+                return; 
+            }
+
+            allNotifications.forEach(notif => {
+                const dateStr = new Date(notif.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+                const imgHtml = notif.image ? `<img src="${notif.image}" class="notif-list-img">` : '';
+                const textHtml = notif.text ? `<p class="notif-text-content">${notif.text}</p>` : '';
+
+                const itemHtml = `
+                    <div class="notif-item">
+                        ${imgHtml}
+                        ${textHtml}
+                        <div class="notif-date">${dateStr}</div>
+                    </div>
+                `;
+                list.innerHTML += itemHtml;
+            });
+
+            // Mark as seen based on the newest item
+            if(allNotifications.length > 0) {
+                localStorage.setItem('apnaAddaLastNotifTime', allNotifications[0].timestamp);
+            }
+            
+            document.getElementById('notificationModal').classList.add('open'); 
+            hideRedDots(); 
+        }
+
         function closeNotificationModal(e) { document.getElementById('notificationModal').classList.remove('open'); }
         
         async function handleNotificationSubmit(e) {
@@ -1297,52 +1344,24 @@
             const file = document.getElementById('notifImage').files[0];
             const btn = document.getElementById('notifSubmitBtn');
             const originalText = btn.innerText;
-
             if (!text && !file && !id) { showToast('Please add text or an image.', 'warning'); return; }
-
             let imgUrl = '';
-            // Retain existing image if editing and no new file selected
-            if (id && !file) { 
-                const existing = allNotifications.find(n => n.id === id); 
-                if(existing) imgUrl = existing.image || ''; 
-            }
-
+            if (id && !file) { const existing = allNotifications.find(n => n.id === id); if(existing) imgUrl = existing.image || ''; }
             if (file) {
                 btn.innerText = "Compressing...";
-                try { imgUrl = await compressAndConvertToBase64(file); } 
-                catch (err) { showToast('Image processing failed', 'error'); btn.innerText = originalText; return; }
+                try { imgUrl = await compressAndConvertToBase64(file); } catch (err) { showToast('Image processing failed', 'error'); btn.innerText = originalText; return; }
             }
-
             const payload = { text: text, image: imgUrl, timestamp: Date.now() };
             btn.innerText = "SENDING...";
-
             let promise;
-
             if (id) {
                 const result = await showConfirm('Update Notification?', 'Users will see the updated version.');
-                if(!result.isConfirmed) {
-                    btn.innerText = originalText;
-                    return;
-                }
+                if(!result.isConfirmed) { btn.innerText = originalText; return; }
                 promise = db.ref('system_notifications/' + id).update(payload);
             } else {
                 promise = db.ref('system_notifications').push(payload);
             }
-
-            promise.then(() => {
-                showToast(id ? 'Updated successfully!' : 'Notification sent!', 'success');
-                resetNotifForm();
-            }).catch(err => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Sending Failed',
-                    text: err.message,
-                    background: '#1a1a1a',
-                    color: '#fff'
-                });
-            }).finally(() => {
-                 btn.innerText = originalText;
-            });
+            promise.then(() => { showToast(id ? 'Updated successfully!' : 'Notification sent!', 'success'); resetNotifForm(); }).catch(err => { Swal.fire({ icon: 'error', title: 'Sending Failed', text: err.message, background: '#1a1a1a', color: '#fff' }); }).finally(() => { btn.innerText = originalText; });
         }
         
         function renderAdminNotifications() {
@@ -1380,6 +1399,62 @@
         function deleteUserChat(){ if(!currentAdminChatUser)return; showConfirm('Delete Chat?', 'This cannot be undone.').then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
         const showToast = (title, icon = 'success') => { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: title, showConfirmButton: false, timer: 3000, timerProgressBar: true, background: '#1a1a1a', color: '#fff', iconColor: '#E50914' }); };
         const showConfirm = (title, text, confirmBtnText = 'Yes, confirm') => { return Swal.fire({ title: title, text: text, icon: 'warning', showCancelButton: true, confirmButtonColor: '#E50914', cancelButtonColor: '#333', confirmButtonText: confirmBtnText, background: '#141414', color: '#fff', iconColor: '#E50914' }); };
+        
+        // --- MAKAR SANKRANTI LOGIC ---
+        function initSankranti() {
+            // Check if we have shown the popup this session (optional, remove check to show every time)
+            if(!sessionStorage.getItem('sankrantiShown')) {
+                setTimeout(() => {
+                    document.getElementById('sankrantiModal').classList.add('active');
+                    startKites();
+                }, 1000);
+            } else {
+                // Even if popup isn't shown, show some kites in background
+                startKites();
+            }
+        }
+
+        function closeSankranti() {
+            document.getElementById('sankrantiModal').classList.remove('active');
+            sessionStorage.setItem('sankrantiShown', 'true');
+            // Launch a burst of kites on close
+            for(let i=0; i<5; i++) setTimeout(createKite, i * 200);
+        }
+
+        function startKites() {
+            // Create a kite every 1.5 seconds
+            setInterval(createKite, 1500);
+        }
+
+        function createKite() {
+            const container = document.getElementById('kiteContainer');
+            if(!container) return;
+
+            const kite = document.createElement('div');
+            kite.classList.add('floating-kite');
+            
+            // Random Position and Color
+            const randomLeft = Math.random() * 100; // 0 to 100vw
+            const randomDuration = 5 + Math.random() * 5; // 5 to 10s
+            const colors = [
+                'linear-gradient(45deg, #e056fd, #be2edd)', // Purple
+                'linear-gradient(45deg, #ff7979, #badc58)', // Red/Green
+                'linear-gradient(45deg, #f0932b, #ffbe76)', // Orange
+                'linear-gradient(45deg, #686de0, #4834d4)'  // Blue
+            ];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            kite.style.left = randomLeft + 'vw';
+            kite.style.animationDuration = randomDuration + 's';
+            kite.style.background = randomColor;
+
+            container.appendChild(kite);
+
+            // Remove kite from DOM after animation finishes to prevent memory leak
+            setTimeout(() => {
+                kite.remove();
+            }, randomDuration * 1000);
+        }
     </script>
 </body>
 </html>
