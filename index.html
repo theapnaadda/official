@@ -25,13 +25,18 @@
     <style>
         :root {
             --primary-red: #E50914; 
-            --dark-black: #000000;
-            --dark-gray: #141414;
             --light-text: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(20, 20, 20, 0.65);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
+        /* --- LIQUID GLASS THEME SETUP --- */
         body {
-            background-color: var(--dark-black);
+            /* Animated Liquid Background */
+            background: linear-gradient(-45deg, #000000, #1a0505, #0f0f20, #050505);
+            background-size: 400% 400%;
+            animation: liquidGradient 15s ease infinite;
             color: var(--light-text);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
@@ -40,6 +45,27 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
+        @keyframes liquidGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glass Utility Class */
+        .glass-effect {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: var(--glass-shadow);
+        }
+        
+        /* Overriding specific Tailwind blacks/grays with transparent glass where needed */
+        .bg-gray-900, .bg-black, .bg-[#1a1a1a] {
+            background-color: rgba(0, 0, 0, 0.4) !important; 
+        }
+
         @media(min-width: 768px) {
             body { padding-bottom: 0; }
         }
@@ -69,25 +95,34 @@
         .nav-link {
             cursor: pointer;
             padding: 0.5rem 1rem;
-            transition: color 0.3s ease;
-            color: #aaa;
+            transition: all 0.3s ease;
+            color: #ccc;
             font-weight: 500;
             font-size: 0.9rem;
             display: inline-block;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .nav-link:hover, .nav-link.active {
             color: var(--primary-red);
             font-weight: 700;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.6);
         }
 
-        /* Bottom Navigation */
+        /* Bottom Navigation (Glass) */
+        .mobile-nav-glass {
+            background: rgba(0, 0, 0, 0.7) !important;
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--glass-border);
+        }
+
         .bottom-nav-item {
-            color: #666;
+            color: #888;
             transition: all 0.3s ease;
         }
         .bottom-nav-item.active {
             color: var(--primary-red);
+            text-shadow: 0 0 8px rgba(229, 9, 20, 0.5);
         }
         .bottom-nav-item.active i {
             transform: translateY(-2px);
@@ -98,21 +133,25 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
+            background: rgba(0,0,0,0.3) !important;
         }
         .accordion-btn.active .fa-chevron-down {
             transform: rotate(180deg);
         }
 
-        /* App Card */
+        /* App Card (Glass Theme) */
         .app-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background-color: var(--dark-gray);
-            border: 1px solid #222;
+            background: rgba(30, 30, 30, 0.4) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .app-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary-red);
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3);
+            background: rgba(40, 40, 40, 0.6) !important;
         }
 
         /* Slideshow */
@@ -142,7 +181,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 100%);
             z-index: 1;
             pointer-events: none;
         }
@@ -152,25 +191,29 @@
             display: none !important;
         }
         
+        /* Glass Inputs */
         input, select, textarea {
-            background-color: #222;
-            border: 1px solid #444;
+            background-color: rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
             color: white;
+            backdrop-filter: blur(5px);
         }
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary-red);
+            border-color: var(--primary-red) !important;
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            box-shadow: 0 0 10px rgba(229, 9, 20, 0.2);
         }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
         ::-webkit-scrollbar-thumb { background: #E50914; border-radius: 4px; }
 
         /* Login Tabs */
         .auth-tabs {
             display: flex;
             position: relative;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
             margin-bottom: 20px;
         }
         .auth-tab-btn {
@@ -184,6 +227,7 @@
         }
         .auth-tab-btn.active {
             color: white;
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
         }
         .auth-glider {
             position: absolute;
@@ -201,7 +245,7 @@
             position: fixed;
             bottom: 90px;
             right: 20px;
-            background-color: var(--primary-red);
+            background: linear-gradient(135deg, #E50914, #b2070f);
             color: white;
             width: 60px;
             height: 60px;
@@ -214,6 +258,7 @@
             box-shadow: 0 4px 15px rgba(229, 9, 20, 0.5);
             z-index: 1000;
             transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         .chat-widget-btn:hover { transform: scale(1.1); }
         
@@ -223,13 +268,15 @@
             right: 20px;
             width: 350px;
             height: 500px;
-            background-color: #1a1a1a;
-            border: 1px solid #333;
+            /* Glass Window */
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
             border-radius: 15px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             z-index: 1000;
             opacity: 0;
             transform: translateY(20px);
@@ -242,7 +289,7 @@
             pointer-events: all;
         }
         .chat-header {
-            background: var(--primary-red);
+            background: rgba(229, 9, 20, 0.9);
             padding: 15px;
             color: white;
             font-weight: bold;
@@ -250,12 +297,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
         .chat-body {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
-            background-color: #0f0f0f;
+            background-color: transparent;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -267,30 +315,33 @@
             font-size: 0.85rem;
             line-height: 1.4;
             word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .msg-admin {
             align-self: flex-start;
-            background-color: #333;
+            background-color: rgba(60, 60, 60, 0.8);
             color: #ddd;
             border-bottom-left-radius: 0;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .msg-user {
             align-self: flex-end;
-            background-color: #E50914;
+            background-color: rgba(229, 9, 20, 0.8);
             color: white;
             border-bottom-right-radius: 0;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .chat-footer {
             padding: 10px;
-            background-color: #1a1a1a;
-            border-top: 1px solid #333;
+            background-color: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.1);
             display: flex;
             gap: 10px;
         }
         .chat-input {
             flex: 1;
-            background: #000;
-            border: 1px solid #333;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
             padding: 8px 12px;
             border-radius: 20px;
             color: white;
@@ -302,6 +353,7 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
+            text-shadow: 0 0 5px rgba(229,9,20,0.5);
         }
         .notification-dot {
             position: absolute;
@@ -321,8 +373,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -336,16 +388,18 @@
             pointer-events: all;
         }
         .notif-box {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
+            /* Glass Modal */
+            background: rgba(25, 25, 25, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             width: 90%;
             max-width: 450px;
-            max-height: 80vh; /* Fixed height for scroll */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            max-height: 80vh; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             transform: scale(0.9);
             transition: transform 0.3s ease;
-            overflow: hidden; /* Hide outer overflow */
+            overflow: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -355,11 +409,11 @@
         }
         .notif-header {
             padding: 15px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #222;
+            background: rgba(0,0,0,0.2);
         }
         .notif-close {
             cursor: pointer;
@@ -369,6 +423,7 @@
         }
         .notif-close:hover {
             color: white;
+            text-shadow: 0 0 5px white;
         }
         
         /* New Scrollable List Styles */
@@ -378,16 +433,16 @@
             padding: 0;
         }
         .notif-item {
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 20px;
-            background: #1a1a1a;
+            background: transparent;
             transition: background 0.2s;
         }
         .notif-item:last-child {
             border-bottom: none;
         }
         .notif-item:hover {
-            background: #222;
+            background: rgba(255,255,255,0.05);
         }
         .notif-list-img {
             width: 100%;
@@ -396,17 +451,17 @@
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 15px;
-            border: 1px solid #333;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .notif-text-content {
             font-size: 0.95rem;
             line-height: 1.5;
             color: #ddd;
-            white-space: pre-wrap; /* Keeps line breaks */
+            white-space: pre-wrap; 
         }
         .notif-date {
             font-size: 0.75rem;
-            color: #666;
+            color: #888;
             margin-top: 10px;
             text-align: right;
             font-weight: bold;
@@ -421,7 +476,7 @@
             margin-right: 15px;
             transition: color 0.3s;
         }
-        .nav-notif-btn:hover { color: white; }
+        .nav-notif-btn:hover { color: white; text-shadow: 0 0 5px white; }
         .red-dot {
             position: absolute;
             top: -2px;
@@ -455,12 +510,12 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
-    <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
+    <!-- TOP NAVIGATION (GLASS) -->
+    <nav class="w-full glass-effect sticky top-0 z-50 border-b border-[rgba(255,255,255,0.1)]">
         <div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
             
             <!-- LOGO -->
-            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
+            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer drop-shadow-md" onclick="navigateTo('home')">
                 APNA ADDA
             </div>
 
@@ -471,7 +526,7 @@
                 <span class="nav-link" id="link-about" onclick="navigateTo('about')">About Us</span>
                 <span class="nav-link" id="link-contact" onclick="navigateTo('contact')">Contact Us</span>
                 
-                <div class="h-4 w-px bg-gray-700 mx-2"></div>
+                <div class="h-4 w-px bg-gray-600 mx-2"></div>
 
                 <!-- NOTIFICATION ICON (DESKTOP) -->
                 <div class="nav-notif-btn" onclick="openNotificationModal()">
@@ -480,8 +535,8 @@
                 </div>
 
                 <!-- Desktop Auth Buttons -->
-                <button id="navLoginBtn" onclick="navigateTo('login')" class="text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded text-sm font-bold transition">Login</button>
-                <button id="navDashboardBtn" onclick="navigateTo('admin')" class="hidden text-white bg-gray-800 hover:bg-gray-700 px-4 py-1.5 rounded text-sm transition">Dashboard</button>
+                <button id="navLoginBtn" onclick="navigateTo('login')" class="text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded text-sm font-bold transition shadow-[0_0_10px_rgba(229,9,20,0.5)]">Login</button>
+                <button id="navDashboardBtn" onclick="navigateTo('admin')" class="hidden text-white bg-gray-800 hover:bg-gray-700 px-4 py-1.5 rounded text-sm transition border border-gray-600">Dashboard</button>
                 <button id="navLogoutBtn" onclick="handleLogout()" class="hidden text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold">Logout</button>
             </div>
 
@@ -522,30 +577,30 @@
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
             <!-- HERO SECTION -->
-            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh]">
+            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-[rgba(255,255,255,0.15)] h-[80vh] md:h-[60vh] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
                 <div class="hero-overlay"></div>
                 <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
-                        APNA <span class="text-red-600">ADDA</span>
+                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+                        APNA <span class="text-red-600 drop-shadow-[0_0_15px_rgba(229,9,20,0.8)]">ADDA</span>
                     </h1>
                     <p class="text-xl md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-10 md:mb-10 drop-shadow-md">
                         Technology for Everyday Growth.
                     </p>
-                    <button onclick="scrollToHomeApps()" class="px-8 py-4 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-lg md:text-base cursor-pointer pointer-events-auto">
+                    <button onclick="scrollToHomeApps()" class="px-8 py-4 md:px-8 md:py-4 glass-effect text-white font-bold rounded-full hover:bg-red-600/40 transition transform hover:scale-105 shadow-lg text-lg md:text-base cursor-pointer pointer-events-auto border border-red-600/50">
                         EXPLORE APPS
                     </button>
                 </div>
             </div>
 
-            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900">
+            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-[rgba(255,255,255,0.1)]">
                 <div class="text-center mb-8 md:mb-10">
-                    <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2 drop-shadow-md">Latest Applications</h2>
                 </div>
                 <!-- OPTIMIZED LOADER -->
                 <div id="homeLoader" class="text-center py-10">
-                    <i class="fas fa-circle-notch fa-spin text-red-600 text-4xl"></i>
-                    <p class="mt-2 text-gray-500">Loading...</p>
+                    <i class="fas fa-circle-notch fa-spin text-red-600 text-4xl drop-shadow-[0_0_10px_rgba(229,9,20,0.6)]"></i>
+                    <p class="mt-2 text-gray-400">Loading...</p>
                 </div>
                 <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
             </div>
@@ -554,7 +609,7 @@
         <!-- 2. APPS SECTION -->
         <div id="section-apps" class="hidden-section animate-fade-in">
             <div class="text-center mb-8 md:mb-10">
-                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">All Applications</h2>
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2 drop-shadow-md">All Applications</h2>
             </div>
             <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
         </div>
@@ -562,9 +617,9 @@
         <!-- 3. PROFILE SECTION -->
         <div id="section-profile" class="hidden-section animate-fade-in">
             <div class="max-w-lg mx-auto">
-                <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center">
+                <div class="glass-effect rounded-lg p-6 mb-6 text-center">
                     <div id="profileLoggedOut" class="hidden">
-                        <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-gray-600">
+                        <div class="w-20 h-20 bg-gray-800/50 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-gray-400 border border-gray-600">
                             <i class="fas fa-user"></i>
                         </div>
                         <h2 class="text-xl font-bold text-white mb-2">Welcome Guest</h2>
@@ -573,14 +628,14 @@
                     </div>
 
                     <div id="profileLoggedIn" class="hidden">
-                        <div class="w-20 h-20 bg-red-900/30 border-2 border-red-600 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-red-500">
+                        <div class="w-20 h-20 bg-red-900/30 border-2 border-red-600 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-red-500 shadow-[0_0_15px_rgba(229,9,20,0.4)]">
                             <i class="fas fa-user-check"></i>
                         </div>
                         <h2 class="text-xl font-bold text-white mb-1" id="profileEmailDisplay">User</h2>
-                        <span class="inline-block bg-gray-800 text-xs px-2 py-1 rounded text-gray-400 mb-4">Member</span>
+                        <span class="inline-block bg-gray-800/60 border border-gray-600 text-xs px-2 py-1 rounded text-gray-300 mb-4">Member</span>
                         
                         <div class="grid grid-cols-2 gap-3">
-                            <button id="profileAdminBtn" onclick="navigateTo('admin')" class="hidden w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded text-sm border border-gray-700">
+                            <button id="profileAdminBtn" onclick="navigateTo('admin')" class="hidden w-full bg-gray-800/60 hover:bg-gray-700 text-white font-bold py-2 rounded text-sm border border-gray-600">
                                 DASHBOARD
                             </button>
                             <button onclick="handleLogout()" class="w-full bg-red-900/20 hover:bg-red-900/40 text-red-500 font-bold py-2 rounded text-sm border border-red-900/50">
@@ -592,50 +647,50 @@
 
                 <!-- Accordions -->
                 <div class="space-y-3">
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
-                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-about', this)">
+                    <div class="glass-effect rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-white/5 transition" onclick="toggleAccordion('acc-about', this)">
                             <span><i class="fas fa-info-circle w-6 text-center text-red-600 mr-2"></i> About Us</span>
                             <i class="fas fa-chevron-down transition-transform duration-300"></i>
                         </button>
-                        <div id="acc-about" class="accordion-content bg-black">
-                            <div class="p-4 text-sm text-gray-400 leading-relaxed text-justify space-y-3">
+                        <div id="acc-about" class="accordion-content">
+                            <div class="p-4 text-sm text-gray-300 leading-relaxed text-justify space-y-3">
                                 <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. We primarily focus on creating applications that support students, while also offering tools that benefit people from all walks of life.</p>
                                 <p>The company was founded and is owned by Premanshu Kumar.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
-                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-contact', this)">
+                    <div class="glass-effect rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-white/5 transition" onclick="toggleAccordion('acc-contact', this)">
                             <span><i class="fas fa-envelope w-6 text-center text-blue-500 mr-2"></i> Contact Us</span>
                             <i class="fas fa-chevron-down transition-transform duration-300"></i>
                         </button>
-                        <div id="acc-contact" class="accordion-content bg-black">
+                        <div id="acc-contact" class="accordion-content">
                             <div class="p-4 flex flex-col gap-3">
                                 <a href="mailto:thepremanshu@gmail.com" class="flex items-center gap-3 text-gray-400 hover:text-white"><i class="fas fa-at text-red-500"></i> Email Us</a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
-                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-privacy', this)">
+                    <div class="glass-effect rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-white/5 transition" onclick="toggleAccordion('acc-privacy', this)">
                             <span><i class="fas fa-shield-alt w-6 text-center text-green-500 mr-2"></i> Privacy Policy</span>
                             <i class="fas fa-chevron-down transition-transform duration-300"></i>
                         </button>
-                        <div id="acc-privacy" class="accordion-content bg-black">
-                            <div class="p-4 text-sm text-gray-400">
+                        <div id="acc-privacy" class="accordion-content">
+                            <div class="p-4 text-sm text-gray-300">
                                 <p>Your privacy is important to APNA ADDA. We respect your personal information and use it only to improve our services.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
-                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-disclaimer', this)">
+                    <div class="glass-effect rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-white/5 transition" onclick="toggleAccordion('acc-disclaimer', this)">
                             <span><i class="fas fa-exclamation-triangle w-6 text-center text-yellow-500 mr-2"></i> Disclaimer</span>
                             <i class="fas fa-chevron-down transition-transform duration-300"></i>
                         </button>
-                        <div id="acc-disclaimer" class="accordion-content bg-black">
-                            <div class="p-4 text-sm text-gray-400">
+                        <div id="acc-disclaimer" class="accordion-content">
+                            <div class="p-4 text-sm text-gray-300">
                                 <p>Information provided on APNA ADDA is for general informational purposes only. Use at your own risk.</p>
                             </div>
                         </div>
@@ -646,9 +701,9 @@
 
         <!-- 4. ABOUT SECTION (Desktop) -->
         <div id="section-about" class="hidden-section hidden md:block">
-             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
-                <div class="space-y-4 text-gray-300 leading-relaxed text-justify">
+             <div class="max-w-4xl mx-auto glass-effect rounded-lg p-12 shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-red-600 drop-shadow-sm">About APNA ADDA</h2>
+                <div class="space-y-4 text-gray-200 leading-relaxed text-justify">
                     <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life.</p>
                     <p>The company was founded and is owned by <strong>Premanshu Kumar</strong>.</p>
                 </div>
@@ -658,9 +713,9 @@
         <!-- 5. CONTACT SECTION (Desktop) -->
         <div id="section-contact" class="hidden-section hidden md:block">
              <div class="flex flex-col items-center justify-center min-h-[50vh]">
-                <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
-                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
-                    <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-3 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded shadow transition">
+                <h2 class="text-4xl font-bold mb-8 drop-shadow-md">Get In Touch</h2>
+                <div class="glass-effect p-8 rounded-xl w-full max-w-lg text-center">
+                    <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-3 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded shadow transition border border-red-500/50">
                         <i class="fas fa-envelope"></i> Email Us
                     </a>
                 </div>
@@ -669,22 +724,22 @@
 
         <!-- 6. PRIVACY & DISCLAIMER (Desktop) -->
         <div id="section-privacy" class="hidden-section hidden md:block">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-6 text-green-500">Privacy Policy</h2>
-                <div class="space-y-4 text-gray-300"><p>Your privacy is important to APNA ADDA. We do not sell your data.</p></div>
+            <div class="max-w-4xl mx-auto glass-effect rounded-lg p-12 shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-green-500 drop-shadow-sm">Privacy Policy</h2>
+                <div class="space-y-4 text-gray-200"><p>Your privacy is important to APNA ADDA. We do not sell your data.</p></div>
             </div>
         </div>
         <div id="section-disclaimer" class="hidden-section hidden md:block">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-6 text-yellow-500">Disclaimer</h2>
-                <div class="space-y-4 text-gray-300"><p>Use our applications at your own discretion. Information is for general purposes.</p></div>
+            <div class="max-w-4xl mx-auto glass-effect rounded-lg p-12 shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-yellow-500 drop-shadow-sm">Disclaimer</h2>
+                <div class="space-y-4 text-gray-200"><p>Use our applications at your own discretion. Information is for general purposes.</p></div>
             </div>
         </div>
 
         <!-- 8. LOGIN / SIGNUP SECTION -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
-            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
-                <button onclick="handleGoogleLogin()" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition flex items-center justify-center gap-3 mb-6">
+            <div class="glass-effect p-8 rounded-lg shadow-2xl w-full max-w-md animate-fade-in mx-2">
+                <button onclick="handleGoogleLogin()" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition flex items-center justify-center gap-3 mb-6 shadow-md">
                     <i class="fab fa-google text-red-600 text-lg"></i> Continue with Google
                 </button>
 
@@ -696,16 +751,16 @@
 
                 <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="auth-form-block">
                     <h3 class="text-white font-bold mb-4 text-xl">Welcome Back</h3>
-                    <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="loginEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
-                    <div class="mb-6"><label class="block text-gray-400 mb-2 text-sm">Password</label><input type="password" id="loginPass" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
-                    <button type="submit" id="loginBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">LOGIN</button>
+                    <div class="mb-4"><label class="block text-gray-300 mb-2 text-sm">Email</label><input type="email" id="loginEmail" class="w-full p-3 rounded transition" required></div>
+                    <div class="mb-6"><label class="block text-gray-300 mb-2 text-sm">Password</label><input type="password" id="loginPass" class="w-full p-3 rounded transition" required></div>
+                    <button type="submit" id="loginBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition shadow-lg border border-red-500/50">LOGIN</button>
                 </form>
 
                 <form id="signupForm" onsubmit="handleSignupSubmit(event)" class="auth-form-block hidden">
                     <h3 class="text-white font-bold mb-4 text-xl">Create Account</h3>
-                    <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="signupEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
-                    <div class="mb-6"><label class="block text-gray-400 mb-2 text-sm">Set Password</label><input type="password" id="signupPass" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
-                    <button type="submit" id="signupBtn" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition">SIGN UP</button>
+                    <div class="mb-4"><label class="block text-gray-300 mb-2 text-sm">Email</label><input type="email" id="signupEmail" class="w-full p-3 rounded transition" required></div>
+                    <div class="mb-6"><label class="block text-gray-300 mb-2 text-sm">Set Password</label><input type="password" id="signupPass" class="w-full p-3 rounded transition" required></div>
+                    <button type="submit" id="signupBtn" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition shadow-lg">SIGN UP</button>
                 </form>
 
             </div>
@@ -713,24 +768,24 @@
 
         <!-- 9. ADMIN DASHBOARD -->
         <div id="section-admin" class="hidden-section">
-            <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-                <h2 class="text-xl md:text-2xl font-bold text-white">Admin Dashboard</h2>
+            <div class="flex justify-between items-center mb-8 border-b border-[rgba(255,255,255,0.1)] pb-4">
+                <h2 class="text-xl md:text-2xl font-bold text-white drop-shadow-md">Admin Dashboard</h2>
             </div>
             <!-- Admin Content -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                  <!-- 1. Add/Edit App Form (Col 1-3) -->
-                 <div class="lg:col-span-3 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                 <div class="lg:col-span-3 glass-effect p-6 rounded-lg h-fit">
                     <h3 class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
                     <form id="appForm" onsubmit="handleAppSubmit(event)">
                         <input type="hidden" id="editAppId">
                         
                         <div class="mb-3">
-                            <label class="text-xs text-gray-400 block mb-1">Name</label>
+                            <label class="text-xs text-gray-300 block mb-1">Name</label>
                             <input type="text" id="appName" class="w-full p-2 rounded" required>
                         </div>
                         
                         <div class="mb-3">
-                            <label class="text-xs text-gray-400 block mb-1">Status Type</label>
+                            <label class="text-xs text-gray-300 block mb-1">Status Type</label>
                             <select id="launchStatus" class="w-full p-2 rounded" onchange="toggleStatusFields()" required>
                                 <option value="Launched">Launched</option>
                                 <option value="Coming Soon">Coming Soon (General)</option>
@@ -753,112 +808,112 @@
 
                         <!-- Dynamic Inputs -->
                         <div id="dateField" class="mb-3 hidden">
-                            <label class="text-xs text-gray-400 block mb-1">Select Date</label>
+                            <label class="text-xs text-gray-300 block mb-1">Select Date</label>
                             <input type="date" id="statusDate" class="w-full p-2 rounded">
                         </div>
                         <div id="weeksField" class="mb-3 hidden">
-                            <label class="text-xs text-gray-400 block mb-1">Number of Weeks</label>
+                            <label class="text-xs text-gray-300 block mb-1">Number of Weeks</label>
                             <input type="number" id="statusWeeks" class="w-full p-2 rounded" placeholder="e.g. 2">
                         </div>
                         <div id="monthsField" class="mb-3 hidden">
-                            <label class="text-xs text-gray-400 block mb-1">Number of Months</label>
+                            <label class="text-xs text-gray-300 block mb-1">Number of Months</label>
                             <input type="number" id="statusMonths" class="w-full p-2 rounded" placeholder="e.g. 6">
                         </div>
                         <div id="hoursField" class="mb-3 hidden">
-                            <label class="text-xs text-gray-400 block mb-1">Number of Hours</label>
+                            <label class="text-xs text-gray-300 block mb-1">Number of Hours</label>
                             <input type="number" id="statusHours" class="w-full p-2 rounded" placeholder="e.g. 17">
                         </div>
                         <div id="countdownField" class="mb-3 hidden">
-                            <div class="p-2 bg-gray-800 rounded border border-gray-700 mb-2">
-                                <label class="text-xs text-gray-400 block mb-1">Target Launch Time</label>
-                                <input type="datetime-local" id="statusCountdown" class="w-full p-2 rounded text-black mb-2">
+                            <div class="p-2 bg-black/40 rounded border border-gray-600 mb-2">
+                                <label class="text-xs text-gray-300 block mb-1">Target Launch Time</label>
+                                <input type="datetime-local" id="statusCountdown" class="w-full p-2 rounded text-white mb-2">
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-xs text-gray-400 block mb-1">Link (Launch URL)</label>
+                            <label class="text-xs text-gray-300 block mb-1">Link (Launch URL)</label>
                             <input type="url" id="appLink" class="w-full p-2 rounded" placeholder="https://...">
                         </div>
                         
-                        <div class="mb-4"><label class="text-xs text-gray-400 block mb-1">Image (Auto-Resized)</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
+                        <div class="mb-4"><label class="text-xs text-gray-300 block mb-1">Image (Auto-Resized)</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
                         <div class="flex gap-2">
                             <button type="submit" id="submitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200">Save</button>
-                            <button type="button" onclick="resetForm()" class="px-3 border border-gray-600 rounded text-white">Reset</button>
+                            <button type="button" onclick="resetForm()" class="px-3 border border-gray-500 rounded text-white">Reset</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- 2. Slideshow (Col 4-6) -->
-                <div class="lg:col-span-3 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                <div class="lg:col-span-3 glass-effect p-6 rounded-lg h-fit">
                     <h3 class="text-lg font-bold text-white mb-4">Slideshow</h3>
                     <div class="mb-4">
                         <input type="file" id="slideUploadInput" class="w-full text-xs text-gray-400 mb-2" accept="image/*">
-                        <button onclick="uploadSlide()" id="slideUploadBtn" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload</button>
+                        <button onclick="uploadSlide()" id="slideUploadBtn" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm shadow">Upload</button>
                     </div>
                     <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto"></div>
                 </div>
 
                 <!-- 3. App List (Col 7-12) -->
-                <div class="lg:col-span-6 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden h-fit mb-6">
-                    <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
+                <div class="lg:col-span-6 glass-effect rounded-lg overflow-hidden h-fit mb-6">
+                    <div class="p-4 bg-black/30 border-b border-[rgba(255,255,255,0.1)]"><h3 class="font-bold">App Database</h3></div>
                     <div class="overflow-x-auto max-h-80 overflow-y-auto">
-                        <table class="w-full text-left text-sm text-gray-400 whitespace-nowrap">
-                            <thead class="bg-gray-800 text-xs uppercase"><tr><th class="p-3">Name</th><th class="p-3">Status</th><th class="p-3 text-right">Action</th></tr></thead>
+                        <table class="w-full text-left text-sm text-gray-300 whitespace-nowrap">
+                            <thead class="bg-black/40 text-xs uppercase"><tr><th class="p-3">Name</th><th class="p-3">Status</th><th class="p-3 text-right">Action</th></tr></thead>
                             <tbody id="adminAppsTable"></tbody>
                         </table>
                     </div>
                 </div>
 
                 <!-- 4. Notification Center (UPDATED: SEND + HISTORY) -->
-                <div class="lg:col-span-6 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                <div class="lg:col-span-6 glass-effect p-6 rounded-lg h-fit">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold text-white"><i class="fas fa-bell text-red-600 mr-2"></i> Notification Center</h3>
                     </div>
                     
                     <!-- Send/Edit Form -->
-                    <form onsubmit="handleNotificationSubmit(event)" class="space-y-4 mb-6 border-b border-gray-800 pb-6">
+                    <form onsubmit="handleNotificationSubmit(event)" class="space-y-4 mb-6 border-b border-[rgba(255,255,255,0.1)] pb-6">
                         <input type="hidden" id="editNotifId">
                         <div>
-                            <label class="text-xs text-gray-400 block mb-1">Notification Text</label>
+                            <label class="text-xs text-gray-300 block mb-1">Notification Text</label>
                             <textarea id="notifText" class="w-full p-2 rounded h-20" placeholder="Type message..."></textarea>
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 block mb-1">Image (Optional, Any Size)</label>
+                            <label class="text-xs text-gray-300 block mb-1">Image (Optional, Any Size)</label>
                             <input type="file" id="notifImage" class="w-full text-xs text-gray-400" accept="image/*">
                         </div>
                         <div class="flex gap-2">
                             <button type="submit" id="notifSubmitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200 text-sm">SEND</button>
-                            <button type="button" onclick="resetNotifForm()" class="px-3 border border-gray-600 rounded text-white text-sm">Reset</button>
+                            <button type="button" onclick="resetNotifForm()" class="px-3 border border-gray-500 rounded text-white text-sm">Reset</button>
                         </div>
-                        <p class="text-[10px] text-gray-500">Will trigger a red dot. Users see list sorted by date.</p>
+                        <p class="text-[10px] text-gray-400">Will trigger a red dot. Users see list sorted by date.</p>
                     </form>
 
                     <!-- History List -->
                     <h4 class="text-sm font-bold text-gray-300 mb-2">Sent Notifications</h4>
-                    <div class="overflow-x-auto max-h-60 overflow-y-auto border border-gray-800 rounded">
-                        <table class="w-full text-left text-xs text-gray-400">
-                            <thead class="bg-gray-800"><tr><th class="p-2">Message</th><th class="p-2 text-right">Action</th></tr></thead>
+                    <div class="overflow-x-auto max-h-60 overflow-y-auto border border-gray-600 rounded">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-black/40"><tr><th class="p-2">Message</th><th class="p-2 text-right">Action</th></tr></thead>
                             <tbody id="adminNotifTable"></tbody>
                         </table>
                     </div>
                 </div>
 
                 <!-- 5. Support (Full) -->
-                <div class="lg:col-span-12 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden mt-2">
-                    <div class="p-4 bg-black border-b border-gray-800 flex justify-between">
+                <div class="lg:col-span-12 glass-effect rounded-lg overflow-hidden mt-2">
+                    <div class="p-4 bg-black/30 border-b border-[rgba(255,255,255,0.1)] flex justify-between">
                         <h3 class="font-bold text-white">Support Messages</h3>
                         <button onclick="fetchSupportChats()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-sync"></i> Refresh</button>
                     </div>
                     <div class="flex flex-col md:flex-row h-[400px]">
-                        <div class="w-full md:w-1/3 border-r border-gray-800 overflow-y-auto bg-[#111]" id="adminSupportUserList"></div>
-                        <div class="w-full md:w-2/3 flex flex-col bg-[#0a0a0a] relative">
-                            <div id="adminChatHeader" class="p-3 border-b border-gray-800 bg-[#141414] font-bold text-gray-300 flex justify-between items-center">
+                        <div class="w-full md:w-1/3 border-r border-[rgba(255,255,255,0.1)] overflow-y-auto bg-black/20" id="adminSupportUserList"></div>
+                        <div class="w-full md:w-2/3 flex flex-col bg-black/40 relative">
+                            <div id="adminChatHeader" class="p-3 border-b border-[rgba(255,255,255,0.1)] bg-black/20 font-bold text-gray-300 flex justify-between items-center">
                                 <span>Select user</span>
                             </div>
                             <div id="adminChatBody" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3"></div>
-                            <div id="adminChatFooter" class="p-3 border-t border-gray-800 bg-[#141414] hidden">
+                            <div id="adminChatFooter" class="p-3 border-t border-[rgba(255,255,255,0.1)] bg-black/20 hidden">
                                 <form onsubmit="sendAdminReply(event)" class="flex gap-2">
-                                    <input type="text" id="adminChatInput" class="flex-1 bg-black border border-gray-700 rounded-full px-4 py-2 text-sm" placeholder="Reply...">
+                                    <input type="text" id="adminChatInput" class="flex-1 bg-black/50 border border-gray-600 rounded-full px-4 py-2 text-sm" placeholder="Reply...">
                                     <button type="submit" class="text-red-600 px-3"><i class="fas fa-paper-plane"></i></button>
                                 </form>
                             </div>
@@ -870,8 +925,8 @@
 
     </main>
 
-    <!-- DESKTOP FOOTER -->
-    <footer class="hidden md:block bg-black border-t border-gray-900 py-8 mt-auto">
+    <!-- DESKTOP FOOTER (GLASS) -->
+    <footer class="hidden md:block glass-effect border-t border-[rgba(255,255,255,0.1)] py-8 mt-auto">
         <div class="container mx-auto px-4 text-center">
             <div class="flex justify-center gap-8 mb-4 text-sm font-medium text-gray-400">
                 <span onclick="navigateTo('privacy')" class="cursor-pointer hover:text-red-500 transition">Privacy Policy</span>
@@ -879,13 +934,13 @@
                 <span onclick="navigateTo('about')" class="cursor-pointer hover:text-red-500 transition">About Us</span>
                 <span onclick="navigateTo('contact')" class="cursor-pointer hover:text-red-500 transition">Contact Us</span>
             </div>
-            <div class="w-24 h-px bg-gray-800 mx-auto mb-4"></div>
-            <p class="text-xs text-gray-600 tracking-widest font-bold">DESIGNED BY PREMANSHU KUMAR</p>
+            <div class="w-24 h-px bg-gray-700 mx-auto mb-4"></div>
+            <p class="text-xs text-gray-500 tracking-widest font-bold">DESIGNED BY PREMANSHU KUMAR</p>
         </div>
     </footer>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <div class="md:hidden fixed bottom-0 left-0 w-full bg-black/95 backdrop-blur-md border-t border-gray-900 flex justify-around items-center py-3 z-40 pb-safe">
+    <!-- MOBILE BOTTOM NAVIGATION (GLASS) -->
+    <div class="md:hidden fixed bottom-0 left-0 w-full mobile-nav-glass flex justify-around items-center py-3 z-40 pb-safe">
         <div class="bottom-nav-item active flex flex-col items-center gap-1 cursor-pointer w-1/3" id="bn-home" onclick="navigateTo('home')">
             <i class="fas fa-home text-xl"></i>
             <span class="text-[10px] font-bold">Home</span>
@@ -911,7 +966,7 @@
                 <div class="flex items-center gap-2"><i class="fas fa-robot"></i> SUPPORT</div>
                 <i class="fas fa-times cursor-pointer" onclick="toggleChatWindow()"></i>
             </div>
-            <div class="bg-gray-800 p-3 text-xs text-center text-gray-400 border-b border-gray-700">
+            <div class="bg-black/50 p-3 text-xs text-center text-gray-400 border-b border-[rgba(255,255,255,0.1)]">
                 WELCOME TO APNA ADDA! HOW CAN WE ASSIST YOU TODAY?
             </div>
             <div class="chat-body" id="userChatBody"></div>
@@ -1081,25 +1136,25 @@
             }
 
             allApps.forEach(a => {
-                let badgeColor = 'bg-gray-600'; let badgeText = ''; let btnText = 'WAIT'; let btnClass = 'bg-gray-800 text-gray-500 action-btn'; let link = '#'; let isClickable = false;
-                if (a.status === 'Launched') { badgeColor = 'bg-green-600'; badgeText = 'LAUNCHED'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn'; link = a.link; isClickable = true; } 
-                else if (a.status === 'Coming Soon') { badgeColor = 'bg-blue-600'; badgeText = 'COMING SOON'; } 
-                else if (a.status === 'come_tomorrow') { badgeColor = 'bg-blue-500'; badgeText = 'COME TOMORROW'; } 
-                else if (a.status === 'delay') { badgeColor = 'bg-yellow-600'; badgeText = 'DELAY IN LAUNCH'; } 
-                else if (a.status === 'date') { badgeColor = 'bg-blue-600'; badgeText = `COMING ON: ${a.statusDetail}`; } 
-                else if (a.status === 'weeks') { badgeColor = 'bg-purple-600'; badgeText = `COMING IN ${a.statusDetail} WEEKS`; } 
-                else if (a.status === 'months') { badgeColor = 'bg-indigo-600'; badgeText = `COMING IN ${a.statusDetail} MONTHS`; } 
-                else if (a.status === 'hours') { badgeColor = 'bg-orange-500 animate-pulse badge-container'; badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; } 
-                else if (a.status === 'countdown') { badgeColor = 'bg-red-600 animate-pulse badge-container'; badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; } 
-                else if (a.status === 'relaunch_date') { badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH: ${a.statusDetail}`; }
-                else if (a.status === 'relaunch_weeks') { badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH IN ${a.statusDetail} WEEKS`; }
-                else if (a.status === 'relaunch_hours') { badgeColor = 'bg-pink-600 animate-pulse badge-container'; badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; }
-                else if (a.status === 'relaunch_countdown') { badgeColor = 'bg-pink-600 animate-pulse badge-container'; badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; }
-                else if (a.status === 'error') { badgeColor = 'bg-red-800'; badgeText = 'WEBSITE ERROR'; btnText = 'WAIT FOR RELAUNCH'; btnClass = 'bg-red-600 text-white action-btn'; link = '#'; isClickable = false; }
-                else if (a.status === 'emergency') { badgeColor = 'bg-red-600 animate-pulse border-2 border-yellow-400'; badgeText = 'EMERGENCY LAUNCH'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn'; link = a.link; isClickable = true; }
+                let badgeColor = 'bg-gray-600/80 backdrop-blur-sm'; let badgeText = ''; let btnText = 'WAIT'; let btnClass = 'bg-gray-800 text-gray-500 action-btn'; let link = '#'; let isClickable = false;
+                if (a.status === 'Launched') { badgeColor = 'bg-green-600/90 backdrop-blur-sm'; badgeText = 'LAUNCHED'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn shadow-md'; link = a.link; isClickable = true; } 
+                else if (a.status === 'Coming Soon') { badgeColor = 'bg-blue-600/90 backdrop-blur-sm'; badgeText = 'COMING SOON'; } 
+                else if (a.status === 'come_tomorrow') { badgeColor = 'bg-blue-500/90 backdrop-blur-sm'; badgeText = 'COME TOMORROW'; } 
+                else if (a.status === 'delay') { badgeColor = 'bg-yellow-600/90 backdrop-blur-sm'; badgeText = 'DELAY IN LAUNCH'; } 
+                else if (a.status === 'date') { badgeColor = 'bg-blue-600/90 backdrop-blur-sm'; badgeText = `COMING ON: ${a.statusDetail}`; } 
+                else if (a.status === 'weeks') { badgeColor = 'bg-purple-600/90 backdrop-blur-sm'; badgeText = `COMING IN ${a.statusDetail} WEEKS`; } 
+                else if (a.status === 'months') { badgeColor = 'bg-indigo-600/90 backdrop-blur-sm'; badgeText = `COMING IN ${a.statusDetail} MONTHS`; } 
+                else if (a.status === 'hours') { badgeColor = 'bg-orange-500/90 animate-pulse badge-container'; badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; } 
+                else if (a.status === 'countdown') { badgeColor = 'bg-red-600/90 animate-pulse badge-container'; badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; } 
+                else if (a.status === 'relaunch_date') { badgeColor = 'bg-pink-700/90'; badgeText = `RELAUNCH: ${a.statusDetail}`; }
+                else if (a.status === 'relaunch_weeks') { badgeColor = 'bg-pink-700/90'; badgeText = `RELAUNCH IN ${a.statusDetail} WEEKS`; }
+                else if (a.status === 'relaunch_hours') { badgeColor = 'bg-pink-600/90 animate-pulse badge-container'; badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; }
+                else if (a.status === 'relaunch_countdown') { badgeColor = 'bg-pink-600/90 animate-pulse badge-container'; badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`; }
+                else if (a.status === 'error') { badgeColor = 'bg-red-800/90'; badgeText = 'WEBSITE ERROR'; btnText = 'WAIT FOR RELAUNCH'; btnClass = 'bg-red-600 text-white action-btn shadow-md'; link = '#'; isClickable = false; }
+                else if (a.status === 'emergency') { badgeColor = 'bg-red-600/90 animate-pulse border-2 border-yellow-400'; badgeText = 'EMERGENCY LAUNCH'; btnText = 'OPEN'; btnClass = 'bg-red-600 text-white action-btn shadow-md'; link = a.link; isClickable = true; }
                 else if (a.status === 'none') { badgeText = ''; }
 
-                const html = `<div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}"><div class="relative w-full h-48 bg-gray-900 border-b border-gray-800">${a.image ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` : `<div class="w-full h-full flex items-center justify-center text-red-600 font-bold text-2xl">ADDA</div>`}${badgeText ? `<span class="absolute top-2 right-2 ${badgeColor} text-white text-[10px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">${badgeText}</span>` : ''}</div><div class="p-4 bg-gray-900 flex flex-col flex-grow"><h3 class="font-bold text-white mb-4 text-lg line-clamp-1">${a.name}</h3><a href="${link}" target="_blank" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">${btnText}</a></div></div>`;
+                const html = `<div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}"><div class="relative w-full h-48 bg-black/40 border-b border-[rgba(255,255,255,0.1)]">${a.image ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` : `<div class="w-full h-full flex items-center justify-center text-red-600 font-bold text-2xl">ADDA</div>`}${badgeText ? `<span class="absolute top-2 right-2 ${badgeColor} text-white text-[10px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">${badgeText}</span>` : ''}</div><div class="p-4 flex flex-col flex-grow"><h3 class="font-bold text-white mb-4 text-lg line-clamp-1 drop-shadow-sm">${a.name}</h3><a href="${link}" target="_blank" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105 border border-white/10">${btnText}</a></div></div>`;
                 g1.innerHTML += html; g2.innerHTML += html;
             });
             startCountdownTimers();
@@ -1167,7 +1222,7 @@
         function resetForm(){ document.getElementById('appForm').reset(); document.getElementById('editAppId').value=''; toggleStatusFields(); }
 
         // --- SLIDESHOW LOGIC ---
-        function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black p-2 border border-gray-700 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="deleteSlide('${x.id}')" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
+        function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black/40 p-2 border border-gray-600 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="deleteSlide('${x.id}')" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
         async function uploadSlide(){ const f=document.getElementById('slideUploadInput').files[0]; const btn = document.getElementById('slideUploadBtn'); if(f){ btn.innerText = "Processing..."; try { const base64 = await compressAndConvertToBase64(f); db.ref('slides').push({image: base64}); showToast('Slide uploaded successfully!'); document.getElementById('slideUploadInput').value = ''; } catch(e) { showToast('Slide upload failed', 'error'); } btn.innerText = "Upload"; } }
         function deleteSlide(id) { showConfirm('Delete Slide?', 'Remove from slideshow?').then((result) => { if (result.isConfirmed) { db.ref('slides/' + id).remove(); showToast('Slide deleted', 'info'); } }); }
 
@@ -1264,12 +1319,12 @@
         
         function renderAdminNotifications() {
             const table = document.getElementById('adminNotifTable'); if(!table) return; table.innerHTML = '';
-            allNotifications.forEach(notif => { const truncatedText = notif.text ? (notif.text.length > 30 ? notif.text.substring(0,30) + '...' : notif.text) : 'Image Only'; const dateStr = new Date(notif.timestamp).toLocaleDateString() + ' ' + new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); table.innerHTML += `<tr class="border-b border-gray-800 hover:bg-gray-800 transition"><td class="p-2"><div class="flex items-center gap-2">${notif.image ? `<img src="${notif.image}" class="w-8 h-8 rounded object-cover border border-gray-600">` : '<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs"><i class="fas fa-comment"></i></div>'}<div class="flex flex-col"><span class="text-white font-bold">${truncatedText}</span><span class="text-[10px] text-gray-500">${dateStr}</span></div></div></td><td class="p-2 text-right"><button onclick="editNotification('${notif.id}')" class="text-blue-400 mr-3 hover:text-white"><i class="fas fa-edit"></i></button><button onclick="deleteNotification('${notif.id}')" class="text-red-500 hover:text-white"><i class="fas fa-trash"></i></button></td></tr>`; });
+            allNotifications.forEach(notif => { const truncatedText = notif.text ? (notif.text.length > 30 ? notif.text.substring(0,30) + '...' : notif.text) : 'Image Only'; const dateStr = new Date(notif.timestamp).toLocaleDateString() + ' ' + new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); table.innerHTML += `<tr class="border-b border-gray-600 hover:bg-gray-800 transition"><td class="p-2"><div class="flex items-center gap-2">${notif.image ? `<img src="${notif.image}" class="w-8 h-8 rounded object-cover border border-gray-600">` : '<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs"><i class="fas fa-comment"></i></div>'}<div class="flex flex-col"><span class="text-white font-bold">${truncatedText}</span><span class="text-[10px] text-gray-400">${dateStr}</span></div></div></td><td class="p-2 text-right"><button onclick="editNotification('${notif.id}')" class="text-blue-400 mr-3 hover:text-white"><i class="fas fa-edit"></i></button><button onclick="deleteNotification('${notif.id}')" class="text-red-500 hover:text-white"><i class="fas fa-trash"></i></button></td></tr>`; });
         }
         function editNotification(id) { const notif = allNotifications.find(n => n.id === id); if (!notif) return; document.getElementById('editNotifId').value = notif.id; document.getElementById('notifText').value = notif.text || ''; document.getElementById('notifSubmitBtn').innerText = "UPDATE"; document.getElementById('notifSubmitBtn').classList.add('bg-yellow-500', 'text-black'); document.getElementById('notifSubmitBtn').classList.remove('bg-white'); showToast('Editing notification...', 'info'); }
         function deleteNotification(id) { showConfirm('Delete Notification?', 'This will verify removing this alert history.').then(res => { if(res.isConfirmed) { db.ref('system_notifications/' + id).remove().then(() => showToast('Notification deleted.', 'info')); } }); }
         function resetNotifForm() { document.getElementById('editNotifId').value = ''; document.getElementById('notifText').value = ''; document.getElementById('notifImage').value = ''; document.getElementById('notifSubmitBtn').innerText = "SEND"; document.getElementById('notifSubmitBtn').classList.remove('bg-yellow-500', 'text-black'); document.getElementById('notifSubmitBtn').classList.add('bg-white'); }
-        function renderAdminTable(){ const t=document.getElementById('adminAppsTable');t.innerHTML=''; allApps.forEach(a=>{ t.innerHTML+=`<tr class="border-b border-gray-800"><td class="p-3 text-white">${a.name}</td><td class="p-3 text-xs text-gray-400">${a.status}</td><td class="p-3 text-right"><button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteApp('${a.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`; }); }
+        function renderAdminTable(){ const t=document.getElementById('adminAppsTable');t.innerHTML=''; allApps.forEach(a=>{ t.innerHTML+=`<tr class="border-b border-gray-600"><td class="p-3 text-white">${a.name}</td><td class="p-3 text-xs text-gray-400">${a.status}</td><td class="p-3 text-right"><button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteApp('${a.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`; }); }
 
         // --- AUTH & OTHER ---
         function switchAuthTab(mode) {
@@ -1291,12 +1346,12 @@
         function toggleChatWindow() { if (!auth.currentUser) { Swal.fire({title:'Authentication Required', text:'Please login to use support chat.', icon:'warning', showCancelButton:true, confirmButtonText:'LOGIN', confirmButtonColor:'#E50914', background:'#111', color:'#fff'}).then((r)=>{if(r.isConfirmed)navigateTo('login');}); return; } const win = document.getElementById('chatWindow'); win.classList.toggle('open'); if(win.classList.contains('open')) { document.getElementById('userChatBadge').classList.add('hidden'); if(currentUserEmail) db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`).update({ hasUnreadAdmin: false }); } }
         function initUserChat(email) { const chatBody = document.getElementById('userChatBody'); db.ref(`support_chats/${sanitizeEmail(email)}`).limitToLast(50).on('value', snapshot => { const data = snapshot.val(); chatBody.innerHTML = ''; if (data && data.messages) { if (data.hasUnreadAdmin) { if (!document.getElementById('chatWindow').classList.contains('open')) document.getElementById('userChatBadge').classList.remove('hidden'); } Object.values(data.messages).forEach(msg => { const div = document.createElement('div'); div.className = `chat-message ${msg.sender === 'admin' ? 'msg-admin' : 'msg-user'}`; div.innerText = msg.text; chatBody.appendChild(div); }); chatBody.scrollTop = chatBody.scrollHeight; } }); }
         function sendUserMessage(e) { e.preventDefault(); const input = document.getElementById('userChatInput'); const text = input.value.trim(); if (!text || !currentUserEmail) return; const chatRef = db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`); chatRef.get().then(snap => { const isFirst = !snap.child('messages').exists(); chatRef.child('messages').push({sender:'user', text:text, timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({userEmail:currentUserEmail, lastMessageTime:firebase.database.ServerValue.TIMESTAMP, hasUnreadUser:true}); input.value = ''; if(isFirst) setTimeout(() => { chatRef.child('messages').push({sender:'admin', text:"ONE TEAM MEMBER WILL SHORTLY ASSISTS YOU!", timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({hasUnreadAdmin:true}); }, 500); }); }
-        function fetchSupportChats() { const list = document.getElementById('adminSupportUserList'); db.ref('support_chats').orderByChild('lastMessageTime').limitToLast(20).on('value', s => { list.innerHTML = ''; const d = s.val(); if(!d) { list.innerHTML='<div class="p-4 text-center text-gray-500">No chats</div>'; return; } Object.entries(d).sort((a,b)=>b[1].lastMessageTime-a[1].lastMessageTime).forEach(([k,v])=>{ const div = document.createElement('div'); div.className=`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-800 ${currentAdminChatUser===k?'bg-gray-800 border-l-4 border-l-red-600':''}`; div.onclick=()=>openAdminChat(k,v.userEmail); div.innerHTML=`<div class="flex justify-between mb-1"><span class="font-bold text-gray-200 text-sm truncate w-24">${v.userEmail.split('@')[0]}</span><span class="text-xs text-gray-500">${new Date(v.lastMessageTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span></div><div class="text-xs text-gray-400 truncate flex items-center"><i class="fas fa-user-circle mr-1"></i> ${v.userEmail} ${v.hasUnreadUser?'<span class="bg-red-600 w-2 h-2 rounded-full ml-2"></span>':''}</div>`; list.appendChild(div); }); }); }
-        function openAdminChat(k,e){ currentAdminChatUser=k; document.getElementById('adminChatHeader').innerHTML=`<span class="text-sm font-bold text-white"><i class="fas fa-user text-red-500 mr-2"></i>${e}</span><button onclick="deleteUserChat()" class="text-red-500 text-xs border border-red-900 px-2 py-1 rounded">DEL</button>`; document.getElementById('adminChatFooter').classList.remove('hidden'); db.ref(`support_chats/${k}`).update({hasUnreadUser:false}); const cb=document.getElementById('adminChatBody'); db.ref(`support_chats/${k}/messages`).limitToLast(50).on('value',s=>{ cb.innerHTML=''; const m=s.val(); if(m)Object.values(m).forEach(x=>{ const d=document.createElement('div'); d.className=`max-w-[80%] p-2 rounded text-xs mb-2 ${x.sender==='admin'?'bg-red-900 text-white self-end':'bg-gray-800 text-gray-300 self-start'}`; d.innerText=x.text; cb.appendChild(d); }); cb.scrollTop=cb.scrollHeight; }); }
+        function fetchSupportChats() { const list = document.getElementById('adminSupportUserList'); db.ref('support_chats').orderByChild('lastMessageTime').limitToLast(20).on('value', s => { list.innerHTML = ''; const d = s.val(); if(!d) { list.innerHTML='<div class="p-4 text-center text-gray-500">No chats</div>'; return; } Object.entries(d).sort((a,b)=>b[1].lastMessageTime-a[1].lastMessageTime).forEach(([k,v])=>{ const div = document.createElement('div'); div.className=`p-4 border-b border-[rgba(255,255,255,0.1)] cursor-pointer hover:bg-white/5 ${currentAdminChatUser===k?'bg-white/10 border-l-4 border-l-red-600':''}`; div.onclick=()=>openAdminChat(k,v.userEmail); div.innerHTML=`<div class="flex justify-between mb-1"><span class="font-bold text-gray-200 text-sm truncate w-24">${v.userEmail.split('@')[0]}</span><span class="text-xs text-gray-500">${new Date(v.lastMessageTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span></div><div class="text-xs text-gray-400 truncate flex items-center"><i class="fas fa-user-circle mr-1"></i> ${v.userEmail} ${v.hasUnreadUser?'<span class="bg-red-600 w-2 h-2 rounded-full ml-2"></span>':''}</div>`; list.appendChild(div); }); }); }
+        function openAdminChat(k,e){ currentAdminChatUser=k; document.getElementById('adminChatHeader').innerHTML=`<span class="text-sm font-bold text-white"><i class="fas fa-user text-red-500 mr-2"></i>${e}</span><button onclick="deleteUserChat()" class="text-red-500 text-xs border border-red-900 px-2 py-1 rounded">DEL</button>`; document.getElementById('adminChatFooter').classList.remove('hidden'); db.ref(`support_chats/${k}`).update({hasUnreadUser:false}); const cb=document.getElementById('adminChatBody'); db.ref(`support_chats/${k}/messages`).limitToLast(50).on('value',s=>{ cb.innerHTML=''; const m=s.val(); if(m)Object.values(m).forEach(x=>{ const d=document.createElement('div'); d.className=`max-w-[80%] p-2 rounded text-xs mb-2 ${x.sender==='admin'?'bg-red-900 text-white self-end shadow':'bg-gray-700 text-gray-300 self-start shadow'}`; d.innerText=x.text; cb.appendChild(d); }); cb.scrollTop=cb.scrollHeight; }); }
         function sendAdminReply(e){ e.preventDefault(); if(!currentAdminChatUser)return; const i=document.getElementById('adminChatInput'); const t=i.value.trim(); if(!t)return; const r=db.ref(`support_chats/${currentAdminChatUser}`); r.child('messages').push({sender:'admin',text:t,timestamp:firebase.database.ServerValue.TIMESTAMP}); r.update({lastMessageTime:firebase.database.ServerValue.TIMESTAMP,hasUnreadAdmin:true}); i.value=''; }
         function deleteUserChat(){ if(!currentAdminChatUser)return; showConfirm('Delete Chat?', 'This cannot be undone.').then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
-        const showToast = (title, icon = 'success') => { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: title, showConfirmButton: false, timer: 3000, timerProgressBar: true, background: '#1a1a1a', color: '#fff', iconColor: '#E50914' }); };
-        const showConfirm = (title, text, confirmBtnText = 'Yes, confirm') => { return Swal.fire({ title: title, text: text, icon: 'warning', showCancelButton: true, confirmButtonColor: '#E50914', cancelButtonColor: '#333', confirmButtonText: confirmBtnText, background: '#141414', color: '#fff', iconColor: '#E50914' }); };
+        const showToast = (title, icon = 'success') => { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: title, showConfirmButton: false, timer: 3000, timerProgressBar: true, background: 'rgba(20,20,20,0.95)', color: '#fff', iconColor: '#E50914' }); };
+        const showConfirm = (title, text, confirmBtnText = 'Yes, confirm') => { return Swal.fire({ title: title, text: text, icon: 'warning', showCancelButton: true, confirmButtonColor: '#E50914', cancelButtonColor: '#333', confirmButtonText: confirmBtnText, background: 'rgba(20,20,20,0.95)', color: '#fff', iconColor: '#E50914' }); };
     </script>
 </body>
 </html>
