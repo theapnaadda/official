@@ -72,7 +72,7 @@
 
         /* --- 100% Transparent Water Droplet Theme (Ultra Clear) --- */
         .liquid-glass {
-            background: rgba(255, 255, 255, 0.005); /* Virtual transparency */
+            background: rgba(255, 255, 255, 0.005);
             backdrop-filter: blur(32px);
             -webkit-backdrop-filter: blur(32px);
             border: 1px solid var(--glass-border);
@@ -94,11 +94,18 @@
             border-left: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* --- Header / Navbar --- */
+        /* --- Header / Navbar (Now Full Width) --- */
         header {
-            position: sticky; top: 20px; width: 90%; max-width: 1200px; margin: 0 auto; padding: 16px 32px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 100; border-radius: 40px;
+            position: sticky; top: 0; width: 100%; padding: 16px 5%;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
         }
+        header.liquid-glass {
+            border-radius: 0; /* Remove rounded corners */
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+        
         .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4rem; letter-spacing: 1.5px; cursor: pointer; }
         .logo i { color: var(--accent-blue); font-size: 1.6rem; text-shadow: 0 0 15px var(--accent-blue); }
 
@@ -204,7 +211,7 @@
         /* Cards Setup */
         .card-item { 
             padding: 20px; display: flex; flex-direction: column; gap: 18px; position: relative; 
-            overflow: hidden; /* Contains image zoom */
+            overflow: hidden; 
         }
         
         .card-img-wrapper {
@@ -223,6 +230,7 @@
             display: inline-block; padding: 14px; text-align: center; border-radius: 14px; color: white;
             border: 1px solid rgba(255,255,255,0.15); text-decoration: none; transition: 0.3s ease; cursor: pointer;
             background: transparent; margin-top: auto; font-weight: 500; font-size: 0.95rem;
+            outline: none; font-family: inherit; width: 100%; box-sizing: border-box;
         }
         .card-action:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .card-action:active { transform: scale(0.96); }
@@ -288,14 +296,15 @@
         .btn-no:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.5); }
         .confirm-btns button:active { transform: scale(0.95); }
 
-        /* --- Auth Modal --- */
+        /* --- Modals Generic Layer --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { width: 440px; padding: 45px; position: relative; transform: scale(0.9); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .modal-overlay.active .modal-content { transform: scale(1); }
-        .close-btn { position: absolute; top: 22px; right: 28px; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); transition: 0.3s ease; }
+        .close-btn { position: absolute; top: 22px; right: 28px; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); transition: 0.3s ease; z-index: 10; }
         .close-btn:hover { color: white; transform: rotate(90deg); }
 
+        /* --- Auth Modal specifics --- */
         .modal-header h2 { font-size: 1.3rem; margin-bottom: 30px; text-align: center; color: var(--accent-blue); text-shadow: 0 0 20px rgba(14, 165, 233, 0.3); letter-spacing: 1px;}
         .modal-tabs { display: flex; position: relative; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .modal-tab { flex: 1; background: none; border: none; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; padding-bottom: 15px; cursor: pointer; transition: 0.3s; z-index: 1; font-family: 'Outfit', sans-serif; letter-spacing: 1px; }
@@ -313,6 +322,20 @@
         .submit-btn { background: transparent; border: 1px solid var(--accent-blue); color: white; padding: 16px; border-radius: 14px; font-weight: 500; font-size: 1.05rem; cursor: pointer; margin-top: 15px; transition: 0.3s ease; box-shadow: 0 0 20px rgba(14, 165, 233, 0.1); letter-spacing: 1px; }
         .submit-btn:hover { background: rgba(14, 165, 233, 0.15); box-shadow: 0 0 30px rgba(14, 165, 233, 0.25); border-color: rgba(14,165,233,0.8); }
         .submit-btn:active { transform: scale(0.96); }
+
+        /* --- Google Auth Button & Divider --- */
+        .auth-divider { display: flex; align-items: center; text-align: center; margin: 25px 0 20px; color: var(--text-muted); font-size: 0.9rem; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .auth-divider span { padding: 0 15px; font-weight: 300; }
+        
+        .google-btn { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 14px; font-weight: 500; font-size: 1.05rem; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; }
+        .google-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); box-shadow: 0 0 20px rgba(255,255,255,0.05); }
+        .google-btn:active { transform: scale(0.96); }
+
+        /* --- Video Player Modal Specifics --- */
+        .video-modal-content { width: 90%; max-width: 900px; padding: 25px; padding-top: 45px; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 14px; overflow: hidden; background: #000; margin-top: 10px; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         /* --- Footer --- */
         .site-footer { text-align: center; padding: 35px; margin-top: auto; border-radius: 40px 40px 0 0; width: 100%; font-family: 'Outfit', sans-serif; letter-spacing: 1.5px; border-bottom: none; border-left: none; border-right: none;}
@@ -388,7 +411,7 @@
         </div>
     </div>
 
-    <!-- Header Navigation (Desktop) -->
+    <!-- Header Navigation (Desktop) - NOW FULL WIDTH -->
     <header class="liquid-glass">
         <div class="logo" onclick="switchPage('home')">
             <i class="fab fa-youtube"></i> APNA ADDA
@@ -418,9 +441,7 @@
                 <div class="glow-line"></div>
                 <p>A website dedicated to teaching the effective use of AI, enabling learners to leverage Artificial intelligence to acquire valuable, real-world skills for personal and professional growth.</p>
                 <div class="hero-btns">
-                    <!-- Updated Telegram Link -->
                     <a href="https://t.me/apnaadda_official" target="_blank" class="btn btn-telegram liquid-glass"><i class="fab fa-telegram-plane"></i> TELEGRAM CHANNEL</a>
-                    <!-- Updated YouTube Link -->
                     <a href="https://youtube.com/@apnaadda_official?si=wKVEJSn4oMPTbTmY" target="_blank" class="btn btn-youtube liquid-glass"><i class="fab fa-youtube"></i> YOUTUBE CHANNEL</a>
                 </div>
             </div>
@@ -634,6 +655,23 @@
                 </div>
                 <button type="submit" class="submit-btn">Create Account <i class="fas fa-user-plus" style="margin-left:5px;"></i></button>
             </form>
+
+            <!-- Continue with Google -->
+            <div class="auth-divider"><span>OR</span></div>
+            <button class="google-btn" onclick="googleSignIn()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" style="width: 24px; height: 24px;">
+                Continue with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="videoModal" class="modal-overlay" onclick="closeVideoModal(event)">
+        <div class="modal-content liquid-glass video-modal-content">
+            <span class="close-btn" onclick="closeVideoModal()"><i class="fas fa-times"></i></span>
+            <div class="video-wrapper">
+                <iframe id="ytIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
         </div>
     </div>
 
@@ -689,6 +727,28 @@
                 btn.classList.remove('active');
                 if(btn.getAttribute('onclick').includes(tabId)) btn.classList.add('active');
             });
+        }
+
+        // --- VIDEO MODAL LOGIC ---
+        function openVideoModal(url) {
+            const vidId = getYoutubeId(url);
+            if (vidId) {
+                // Set the iframe source with autoplay enabled
+                document.getElementById('ytIframe').src = `https://www.youtube.com/embed/${vidId}?autoplay=1`;
+                document.getElementById('videoModal').classList.add('active');
+            } else {
+                // Fallback for non-standard YouTube URLs
+                window.open(url, '_blank');
+            }
+        }
+
+        function closeVideoModal(e) {
+            // Close only if user clicked on the semi-transparent background or the close button specifically
+            if (e && e.target !== document.getElementById('videoModal') && !e.target.closest('.close-btn')) return;
+            
+            document.getElementById('videoModal').classList.remove('active');
+            // Remove the video source to stop background playback
+            document.getElementById('ytIframe').src = "";
         }
 
         // --- AUTH UI ---
@@ -757,6 +817,18 @@
             auth.createUserWithEmailAndPassword(email, pass)
                 .then(() => showToast("Account created successfully!"))
                 .catch(err => showToast(`Signup failed: ${err.message}`));
+        }
+
+        function googleSignIn() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    showToast("Successfully logged in with Google!");
+                    closeModal();
+                })
+                .catch((err) => {
+                    showToast(`Google Sign-In failed: ${err.message}`);
+                });
         }
 
         // --- CUSTOM CONFIRM MODAL LOGIC ---
@@ -953,13 +1025,14 @@
                 const data = child.val();
                 const id = child.key;
                 
+                // Changed from <a href="..." target="_blank"> to a button that triggers openVideoModal
                 pubGrid.innerHTML += `
                     <div class="card-item liquid-glass">
                         <div class="card-img-wrapper">
                             <img src="${data.thumbnail}" class="card-img" alt="Video Thumbnail">
                         </div>
                         <div class="card-title">${escapeHtml(data.title)}</div>
-                        <a href="${data.url}" target="_blank" class="card-action"><i class="fas fa-play"></i> Watch Now</a>
+                        <button onclick="openVideoModal('${data.url}')" class="card-action"><i class="fas fa-play"></i> Watch Now</button>
                     </div>
                 `;
 
