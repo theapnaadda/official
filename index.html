@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apna Adda - AI Learning | Happy Holi 🎨</title>
+    <title>Apna Adda - AI Learning</title>
     
     <!-- Fonts: Poppins for body, Outfit for futuristic headings -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -16,25 +16,15 @@
 
     <style>
         :root {
-            /* Kept the dark base so the bright Holi colors POP like neon */
-            --bg-color: #02040a; 
+            --bg-color: #02040a;
             --text-color: #ffffff;
-            --text-muted: #d1d5db; /* Lightened slightly for better contrast against colors */
-            
-            /* Holi Festive Colors */
-            --holi-pink: #ff007a;
-            --holi-orange: #ff5e00;
-            --holi-yellow: #ffea00;
-            --holi-green: #00ff55;
-            --holi-cyan: #00e5ff;
-            --holi-purple: #9d00ff;
-
-            --accent-blue: var(--holi-cyan);
-            --accent-red: var(--holi-pink);
-            
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-highlight: rgba(255, 255, 255, 0.3);
+            --text-muted: #9ca3af;
+            --accent-blue: #0ea5e9;
+            --accent-red: #ef4444;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
             --glass-shadow: rgba(0, 0, 0, 0.6);
+            --glow-blue: rgba(14, 165, 233, 0.5);
         }
 
         * {
@@ -54,82 +44,35 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- Custom Holi Loader --- */
-        #holiLoader {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #02040a; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-        .splash-container {
-            position: relative; width: 200px; height: 200px; margin-bottom: 20px;
-        }
-        .splash {
-            position: absolute; border-radius: 50%; filter: blur(25px); opacity: 0.8;
-            animation: splashAnim 3s infinite alternate ease-in-out;
-        }
-        .splash-1 { background: var(--holi-pink); width: 100%; height: 100%; top: 0; left: 0; }
-        .splash-2 { background: var(--holi-cyan); width: 80%; height: 80%; top: 10%; left: 30%; animation-delay: -1s; }
-        .splash-3 { background: var(--holi-yellow); width: 90%; height: 90%; top: -10%; left: -20%; animation-delay: -2s; }
-        .splash-4 { background: var(--holi-green); width: 70%; height: 70%; bottom: -10%; right: -10%; animation-delay: -1.5s; }
-        
-        #holiLoader h1 {
-            font-family: 'Outfit', sans-serif; font-size: 3.5rem; letter-spacing: 2px;
-            background: linear-gradient(to right, var(--holi-pink), var(--holi-orange), var(--holi-yellow), var(--holi-green), var(--holi-cyan));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: pulseText 1.5s infinite alternate, rainbowPan 3s linear infinite;
-            background-size: 200% auto;
-        }
-        #holiLoader p {
-            color: var(--text-muted); font-size: 1.1rem; margin-top: 10px; font-weight: 300; letter-spacing: 1px;
-        }
-
-        @keyframes splashAnim {
-            0% { transform: scale(0.9) translate(0, 0); }
-            100% { transform: scale(1.2) translate(15px, 15px); }
-        }
-        @keyframes rainbowPan {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-        @keyframes pulseText {
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,0,122,0.5)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(0,229,255,0.8)); }
-        }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--holi-pink); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
-        h1, h2, h3, .logo, .badge { font-family: 'Outfit', sans-serif; }
+        h1, h2, h3, .logo, .badge {
+            font-family: 'Outfit', sans-serif;
+        }
 
-        /* --- Animated Background (Holi Gulal Theme) --- */
+        /* --- Animated Background --- */
         .bg-orbs {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; background: #02040a;
         }
         .orb {
-            position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.55; 
-            animation: floatHoli 25s infinite ease-in-out alternate; mix-blend-mode: screen;
+            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.45; animation: float 20s infinite ease-in-out alternate;
         }
-        /* Increased the number of orbs and made them Holi colors */
-        .orb-1 { width: 550px; height: 550px; background: var(--holi-pink); top: -10%; left: 5%; }
-        .orb-2 { width: 450px; height: 450px; background: var(--holi-cyan); bottom: -10%; right: 5%; animation-delay: -5s; }
-        .orb-3 { width: 400px; height: 400px; background: var(--holi-yellow); top: 30%; left: 40%; animation-delay: -10s; }
-        .orb-4 { width: 500px; height: 500px; background: var(--holi-green); top: 60%; left: -10%; animation-delay: -7s; }
-        .orb-5 { width: 350px; height: 350px; background: var(--holi-purple); top: 10%; right: 20%; animation-delay: -15s; }
-        .orb-6 { width: 400px; height: 400px; background: var(--holi-orange); bottom: 20%; left: 30%; animation-delay: -3s; opacity: 0.4; }
+        .orb-1 { width: 500px; height: 500px; background: #1e3a8a; top: -10%; left: 10%; }
+        .orb-2 { width: 400px; height: 400px; background: #0ea5e9; bottom: -5%; right: 5%; animation-delay: -5s; }
+        .orb-3 { width: 350px; height: 350px; background: #4c1d95; top: 35%; left: 45%; animation-delay: -10s; }
 
-        @keyframes floatHoli {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            50% { transform: translate(80px, 40px) scale(1.2) rotate(180deg); }
-            100% { transform: translate(-40px, 90px) scale(0.9) rotate(360deg); }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, 60px) scale(1.15); }
         }
 
-        /* --- 100% Transparent Water Droplet Theme (Ultra Clear) with Festive Hint --- */
+        /* --- 100% Transparent Water Droplet Theme (Ultra Clear) --- */
         .liquid-glass {
-            background: rgba(255, 255, 255, 0.015);
+            background: rgba(255, 255, 255, 0.005);
             backdrop-filter: blur(32px);
             -webkit-backdrop-filter: blur(32px);
             border: 1px solid var(--glass-border);
@@ -145,30 +88,26 @@
         .liquid-glass:hover {
             box-shadow: 
                 0 20px 45px rgba(0,0,0,0.8), 
-                inset 0 0 25px rgba(255, 0, 122, 0.15), /* Subtle pink Holi glow inside */
-                inset 0 0 45px rgba(0, 229, 255, 0.1);  /* Subtle cyan Holi glow inside */
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-top: 1px solid rgba(255, 255, 255, 0.4);
-            border-left: 1px solid rgba(255, 255, 255, 0.4);
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* --- Header / Navbar --- */
+        /* --- Header / Navbar (Now Full Width) --- */
         header {
             position: sticky; top: 0; width: 100%; padding: 16px 5%;
             display: flex; justify-content: space-between; align-items: center; z-index: 100;
         }
         header.liquid-glass {
-            border-radius: 0; border-top: none; border-left: none; border-right: none;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0; /* Remove rounded corners */
+            border-top: none;
+            border-left: none;
+            border-right: none;
         }
         
         .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4rem; letter-spacing: 1.5px; cursor: pointer; }
-        /* Festive Logo color */
-        .logo i { 
-            background: linear-gradient(to right, var(--holi-pink), var(--holi-yellow));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-size: 1.7rem; filter: drop-shadow(0 0 10px var(--holi-pink)); 
-        }
+        .logo i { color: var(--accent-blue); font-size: 1.6rem; text-shadow: 0 0 15px var(--accent-blue); }
 
         nav { display: flex; gap: 35px; }
         .nav-link {
@@ -176,7 +115,6 @@
             display: flex; align-items: center; gap: 8px; transition: 0.3s;
         }
         .nav-link:hover, .nav-link.active { color: var(--text-color); text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
-        .nav-link.active i { color: var(--holi-cyan); text-shadow: 0 0 15px var(--holi-cyan); }
 
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .action-btn {
@@ -184,7 +122,7 @@
             border-radius: 14px; cursor: pointer; transition: 0.3s ease; box-shadow: inset 0 0 10px rgba(255,255,255,0.02);
             font-weight: 500; font-size: 0.9rem;
         }
-        .action-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+        .action-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3); }
         .action-btn:active { transform: scale(0.92); }
         #adminNavBtn { display: none; color: #facc15; border-color: rgba(250, 204, 21, 0.3); }
         #adminNavBtn:hover { background: rgba(250, 204, 21, 0.1); }
@@ -195,22 +133,20 @@
         .page.active { display: block; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Holi Rainbow Glowing Separator Line */
+        /* Glowing Separator Line */
         .glow-line {
-            width: 100%; max-width: 350px; height: 2px; margin: 25px auto;
-            background: linear-gradient(90deg, transparent, var(--holi-pink), var(--holi-yellow), var(--holi-cyan), transparent);
-            box-shadow: 0 0 20px var(--holi-pink), 0 0 40px var(--holi-cyan);
-            opacity: 0.85; border-radius: 5px;
+            width: 100%; max-width: 350px; height: 1px; margin: 25px auto;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            box-shadow: 0 0 20px var(--accent-blue);
+            opacity: 0.7;
         }
 
         /* --- Hero Section --- */
         .hero { text-align: center; padding: 70px 0; display: flex; flex-direction: column; align-items: center; }
-        
         .badge {
-            display: inline-flex; align-items: center; gap: 10px; padding: 10px 30px; border-radius: 30px; font-size: 0.85rem; letter-spacing: 3px;
-            color: #fff; margin-bottom: 30px; border: 1px solid rgba(255, 0, 122, 0.5);
-            background: linear-gradient(90deg, rgba(255,0,122,0.1), rgba(0,229,255,0.1));
-            box-shadow: 0 0 25px rgba(255, 0, 122, 0.2), inset 0 0 15px rgba(0, 229, 255, 0.15); text-transform: uppercase;
+            display: inline-block; padding: 10px 30px; border-radius: 30px; font-size: 0.85rem; letter-spacing: 3px;
+            color: #bae6fd; margin-bottom: 30px; border: 1px solid rgba(14, 165, 233, 0.3);
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.15), inset 0 0 15px rgba(14, 165, 233, 0.1); text-transform: uppercase;
         }
         
         .hero h1 { 
@@ -218,12 +154,10 @@
             font-weight: 800; 
             letter-spacing: 1px; 
             margin-bottom: 5px; 
-            background: linear-gradient(to right, var(--holi-pink), var(--holi-orange), var(--holi-yellow), var(--holi-green), var(--holi-cyan), var(--holi-purple));
-            background-size: 200% auto;
+            background: linear-gradient(135deg, #ffffff, #a5f3fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(255, 0, 122, 0.4);
-            animation: rainbowPan 4s linear infinite;
+            text-shadow: 0 0 40px rgba(14, 165, 233, 0.3);
         }
         
         .hero p { color: var(--text-muted); max-width: 750px; font-size: 1.15rem; line-height: 1.8; margin: 20px 0 45px; font-weight: 300; }
@@ -234,17 +168,17 @@
             cursor: pointer; color: white; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none;
             background: transparent; backdrop-filter: blur(10px); font-size: 0.95rem; letter-spacing: 1px;
         }
-        .btn-telegram { border: 1px solid rgba(0, 229, 255, 0.5); box-shadow: 0 10px 30px rgba(0, 229, 255, 0.15); }
-        .btn-telegram i { color: var(--holi-cyan); font-size: 1.3rem; }
-        .btn-telegram:hover { background: rgba(0, 229, 255, 0.15); box-shadow: 0 15px 40px rgba(0, 229, 255, 0.3); transform: translateY(-4px); border-color: rgba(0, 229, 255, 0.9); }
+        .btn-telegram { border: 1px solid rgba(14, 165, 233, 0.4); box-shadow: 0 10px 30px rgba(14, 165, 233, 0.1); }
+        .btn-telegram i { color: var(--accent-blue); font-size: 1.3rem; }
+        .btn-telegram:hover { background: rgba(14, 165, 233, 0.1); box-shadow: 0 15px 40px rgba(14, 165, 233, 0.25); transform: translateY(-4px); border-color: rgba(14, 165, 233, 0.8); }
         
-        .btn-youtube { border: 1px solid rgba(255, 0, 122, 0.5); box-shadow: 0 10px 30px rgba(255, 0, 122, 0.15); }
-        .btn-youtube i { color: var(--holi-pink); font-size: 1.3rem; }
-        .btn-youtube:hover { background: rgba(255, 0, 122, 0.15); box-shadow: 0 15px 40px rgba(255, 0, 122, 0.3); transform: translateY(-4px); border-color: rgba(255, 0, 122, 0.9); }
+        .btn-youtube { border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1); }
+        .btn-youtube i { color: var(--accent-red); font-size: 1.3rem; }
+        .btn-youtube:hover { background: rgba(239, 68, 68, 0.1); box-shadow: 0 15px 40px rgba(239, 68, 68, 0.25); transform: translateY(-4px); border-color: rgba(239, 68, 68, 0.8); }
         
         .btn:active { transform: scale(0.95) !important; }
 
-        /* --- Features Section --- */
+        /* --- Why AI Section --- */
         .features { padding: 90px 0; text-align: center; }
         .features h2 { font-size: 3.5rem; margin-bottom: 15px; }
         .features p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 60px; max-width: 800px; margin-inline: auto; font-weight: 300;}
@@ -253,11 +187,7 @@
         .feature-card i { font-size: 2.5rem; margin-bottom: 25px; filter: drop-shadow(0 0 15px currentColor); opacity: 0.9; }
         .feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 600; }
         .feature-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; font-weight: 300; }
-        
-        /* Colorful Holi Icons */
-        .icon-blue { color: var(--holi-cyan); } 
-        .icon-purple { color: var(--holi-purple); } 
-        .icon-yellow { color: var(--holi-yellow); }
+        .icon-blue { color: #38bdf8; } .icon-purple { color: #c084fc; } .icon-yellow { color: #facc15; }
 
         /* --- Info Section --- */
         .info-section { display: flex; gap: 70px; align-items: center; padding: 90px 0; }
@@ -267,10 +197,10 @@
         .info-content p { color: var(--text-muted); margin-bottom: 25px; line-height: 1.8; font-size: 1.05rem; font-weight: 300;}
         .stats { display: flex; gap: 25px; margin-top: 45px; }
         .stat-box { padding: 30px; flex: 1; text-align: center; border-radius: 20px; }
-        .stat-box h3 { font-size: 2.5rem; margin-bottom: 5px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .stat-box p { font-size: 0.85rem; color: var(--holi-pink); text-transform: uppercase; letter-spacing: 2px; font-weight: 600;}
+        .stat-box h3 { font-size: 2.5rem; margin-bottom: 5px; color: #f8fafc; }
+        .stat-box p { font-size: 0.85rem; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 2px; font-weight: 600;}
         .info-image { flex: 1; border-radius: 30px; overflow: hidden; position: relative; padding: 8px; }
-        .info-image img { width: 100%; height: auto; border-radius: 22px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); }
+        .info-image img { width: 100%; height: auto; border-radius: 22px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
 
         /* --- Sections Data Grids --- */
         .section-header { text-align: center; margin-bottom: 60px; }
@@ -286,7 +216,7 @@
         
         .card-img-wrapper {
             width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3);
         }
         .card-img { 
             width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -298,17 +228,17 @@
         
         .card-action {
             display: inline-block; padding: 14px; text-align: center; border-radius: 14px; color: white;
-            border: 1px solid rgba(255,255,255,0.2); text-decoration: none; transition: 0.3s ease; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.15); text-decoration: none; transition: 0.3s ease; cursor: pointer;
             background: transparent; margin-top: auto; font-weight: 500; font-size: 0.95rem;
             outline: none; font-family: inherit; width: 100%; box-sizing: border-box;
         }
-        .card-action:hover { background: rgba(0,229,255,0.1); border-color: var(--holi-cyan); box-shadow: 0 5px 20px rgba(0,229,255,0.2); color: #fff;}
+        .card-action:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .card-action:active { transform: scale(0.96); }
 
         /* --- Admin Panel Redesign --- */
-        .admin-nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 25px; }
+        .admin-nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 25px; }
         .admin-tab-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 12px 30px; border-radius: 20px; cursor: pointer; font-size: 1.1rem; font-family: 'Outfit', sans-serif; transition: 0.3s; font-weight: 500;}
-        .admin-tab-btn.active { color: white; border-color: rgba(255, 0, 122, 0.5); background: rgba(255, 0, 122, 0.15); text-shadow: 0 0 15px var(--holi-pink); box-shadow: 0 0 20px rgba(255,0,122,0.2); }
+        .admin-tab-btn.active { color: white; border-color: rgba(14, 165, 233, 0.4); background: rgba(14, 165, 233, 0.1); text-shadow: 0 0 15px var(--accent-blue); box-shadow: 0 0 20px rgba(14,165,233,0.1); }
         
         .admin-section { display: none; animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         .admin-section.active { display: block; }
@@ -318,112 +248,100 @@
         .admin-form { padding: 35px; display: flex; flex-direction: column; gap: 20px; position: sticky; top: 110px; }
         .admin-form h3 { font-size: 1.5rem; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
         .admin-form input, .admin-form textarea {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); padding: 16px; border-radius: 14px;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 16px; border-radius: 14px;
             color: white; outline: none; font-family: 'Poppins', sans-serif; transition: 0.3s ease; font-weight: 300;
         }
-        .admin-form input:focus, .admin-form textarea:focus { border-color: var(--holi-cyan); box-shadow: 0 0 15px rgba(0,229,255,0.2); background: rgba(0,0,0,0.6); }
+        .admin-form input:focus, .admin-form textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(14, 165, 233, 0.15); background: rgba(0,0,0,0.5); }
         
         .admin-submit-btn {
-            background: transparent; border: 1px solid var(--holi-cyan); color: white; padding: 16px; border-radius: 14px;
-            cursor: pointer; transition: 0.3s ease; font-weight: 500; font-size: 1rem; box-shadow: 0 0 20px rgba(0,229,255,0.15);
+            background: transparent; border: 1px solid var(--accent-blue); color: white; padding: 16px; border-radius: 14px;
+            cursor: pointer; transition: 0.3s ease; font-weight: 500; font-size: 1rem; box-shadow: 0 0 20px rgba(14, 165, 233, 0.1);
         }
-        .admin-submit-btn:hover { background: rgba(0,229,255,0.15); box-shadow: 0 0 25px rgba(0,229,255,0.3); border-color: var(--holi-cyan); }
+        .admin-submit-btn:hover { background: rgba(14, 165, 233, 0.15); box-shadow: 0 0 25px rgba(14, 165, 233, 0.3); border-color: rgba(14, 165, 233, 0.8); }
         .admin-submit-btn:active { transform: scale(0.96); }
         
         .cancel-edit-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 12px; border-radius: 14px; cursor: pointer; display: none; transition: 0.3s; font-weight: 500;}
-        .cancel-edit-btn:hover { background: rgba(255,255,255,0.1); color: white; border-color: white;}
+        .cancel-edit-btn:hover { background: rgba(255,255,255,0.08); color: white; border-color: white;}
 
         /* Admin Data Grid (List View) */
         .admin-list { display: flex; flex-direction: column; gap: 15px; }
         .admin-list-item { padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; transition: 0.4s ease; border-radius: 20px;}
-        .admin-list-item:hover { transform: translateX(8px); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.25); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .admin-list-item:hover { transform: translateX(8px); background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
         .admin-item-info { display: flex; align-items: center; gap: 18px; flex: 1; overflow: hidden; }
-        .admin-item-img { width: 90px; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); }
+        .admin-item-img { width: 90px; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
         .admin-item-title { font-weight: 500; font-family: 'Outfit', sans-serif; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .admin-item-actions { display: flex; gap: 12px; }
         .icon-btn {
-            width: 42px; height: 42px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: transparent;
+            width: 42px; height: 42px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: transparent;
             color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s ease;
         }
-        .icon-btn.edit:hover { background: rgba(0,229,255,0.15); border-color: var(--holi-cyan); color: var(--holi-cyan); box-shadow: 0 0 15px rgba(0,229,255,0.2); }
-        .icon-btn.delete:hover { background: rgba(255,0,122,0.15); border-color: var(--holi-pink); color: var(--holi-pink); box-shadow: 0 0 15px rgba(255,0,122,0.2); }
+        .icon-btn.edit:hover { background: rgba(14, 165, 233, 0.15); border-color: rgba(14,165,233,0.5); color: var(--accent-blue); box-shadow: 0 0 15px rgba(14,165,233,0.2); }
+        .icon-btn.delete:hover { background: rgba(239, 68, 68, 0.15); border-color: rgba(239,68,68,0.5); color: var(--accent-red); box-shadow: 0 0 15px rgba(239,68,68,0.2); }
         .icon-btn:active { transform: scale(0.9); }
 
         /* --- Custom Toasts & Confirmations --- */
         #toastContainer { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); z-index: 3000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #toastContainer.show { top: 30px; }
-        .toast-msg { padding: 16px 32px; font-weight: 500; display: flex; align-items: center; gap: 12px; border-color: var(--holi-cyan); box-shadow: 0 15px 40px rgba(0,0,0,0.8); font-size: 0.95rem; }
+        .toast-msg { padding: 16px 32px; font-weight: 500; display: flex; align-items: center; gap: 12px; border-color: rgba(14, 165, 233, 0.4); box-shadow: 0 15px 40px rgba(0,0,0,0.6); font-size: 0.95rem; }
 
-        .confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 2500; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.4s ease; }
+        .confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 2500; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .confirm-overlay.active { opacity: 1; pointer-events: all; }
         .confirm-box { padding: 45px; width: 400px; text-align: center; transform: scale(0.8); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .confirm-overlay.active .confirm-box { transform: scale(1); }
         .confirm-btns { display: flex; gap: 15px; margin-top: 35px; }
         .confirm-btns button { flex: 1; padding: 14px; border-radius: 14px; cursor: pointer; font-weight: 500; background: transparent; color: white; transition: 0.3s; font-family: 'Poppins', sans-serif; font-size: 1rem; }
-        .btn-yes { border: 1px solid var(--holi-pink); }
-        .btn-yes:hover { background: rgba(255,0,122,0.15); box-shadow: 0 0 20px rgba(255,0,122,0.25); border-color: var(--holi-pink);}
-        .btn-no { border: 1px solid rgba(255,255,255,0.25); }
-        .btn-no:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255,255,255,0.6); }
+        .btn-yes { border: 1px solid var(--accent-red); }
+        .btn-yes:hover { background: rgba(239, 68, 68, 0.15); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.8);}
+        .btn-no { border: 1px solid rgba(255,255,255,0.2); }
+        .btn-no:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.5); }
         .confirm-btns button:active { transform: scale(0.95); }
 
         /* --- Modals Generic Layer --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s ease; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { width: 440px; padding: 45px; position: relative; transform: scale(0.9); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .close-btn { position: absolute; top: 22px; right: 28px; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); transition: 0.3s ease; z-index: 10; }
-        .close-btn:hover { color: var(--holi-pink); filter: drop-shadow(0 0 10px var(--holi-pink)); transform: rotate(90deg); }
+        .close-btn:hover { color: white; transform: rotate(90deg); }
 
         /* --- Auth Modal specifics --- */
-        .modal-header h2 { font-size: 1.3rem; margin-bottom: 30px; text-align: center; color: var(--holi-cyan); text-shadow: 0 0 20px rgba(0,229,255,0.3); letter-spacing: 1px;}
-        .modal-tabs { display: flex; position: relative; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+        .modal-header h2 { font-size: 1.3rem; margin-bottom: 30px; text-align: center; color: var(--accent-blue); text-shadow: 0 0 20px rgba(14, 165, 233, 0.3); letter-spacing: 1px;}
+        .modal-tabs { display: flex; position: relative; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .modal-tab { flex: 1; background: none; border: none; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; padding-bottom: 15px; cursor: pointer; transition: 0.3s; z-index: 1; font-family: 'Outfit', sans-serif; letter-spacing: 1px; }
         .modal-tab.active { color: white; text-shadow: 0 0 15px rgba(255,255,255,0.5); }
         
-        .slider { position: absolute; bottom: -1.5px; left: 0; width: 50%; height: 3px; background: var(--holi-cyan); box-shadow: 0 0 15px var(--holi-cyan); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 3px; }
+        .slider { position: absolute; bottom: -1.5px; left: 0; width: 50%; height: 3px; background: var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 3px; }
 
         .auth-form { display: flex; flex-direction: column; gap: 20px; }
         .auth-form.hidden { display: none; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 0.9rem; color: var(--text-muted); font-weight: 300; }
-        .input-group input { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); padding: 16px; border-radius: 14px; color: white; outline: none; transition: 0.3s ease; font-family: 'Poppins', sans-serif; font-weight: 300;}
-        .input-group input:focus { border-color: var(--holi-cyan); box-shadow: inset 0 0 15px rgba(0,229,255,0.15); background: rgba(0,0,0,0.5);}
+        .input-group input { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 16px; border-radius: 14px; color: white; outline: none; transition: 0.3s ease; font-family: 'Poppins', sans-serif; font-weight: 300;}
+        .input-group input:focus { border-color: var(--accent-blue); box-shadow: inset 0 0 15px rgba(14,165,233,0.1); background: rgba(0,0,0,0.4);}
         
-        .submit-btn { background: transparent; border: 1px solid var(--holi-cyan); color: white; padding: 16px; border-radius: 14px; font-weight: 500; font-size: 1.05rem; cursor: pointer; margin-top: 15px; transition: 0.3s ease; box-shadow: 0 0 20px rgba(0,229,255,0.15); letter-spacing: 1px; }
-        .submit-btn:hover { background: rgba(0,229,255,0.15); box-shadow: 0 0 30px rgba(0,229,255,0.3); border-color: var(--holi-cyan); }
+        .submit-btn { background: transparent; border: 1px solid var(--accent-blue); color: white; padding: 16px; border-radius: 14px; font-weight: 500; font-size: 1.05rem; cursor: pointer; margin-top: 15px; transition: 0.3s ease; box-shadow: 0 0 20px rgba(14, 165, 233, 0.1); letter-spacing: 1px; }
+        .submit-btn:hover { background: rgba(14, 165, 233, 0.15); box-shadow: 0 0 30px rgba(14, 165, 233, 0.25); border-color: rgba(14,165,233,0.8); }
         .submit-btn:active { transform: scale(0.96); }
 
         /* --- Google Auth Button & Divider --- */
         .auth-divider { display: flex; align-items: center; text-align: center; margin: 25px 0 20px; color: var(--text-muted); font-size: 0.9rem; }
-        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.15); }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .auth-divider span { padding: 0 15px; font-weight: 300; }
         
-        .google-btn { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 16px; border-radius: 14px; font-weight: 500; font-size: 1.05rem; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; }
-        .google-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+        .google-btn { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 14px; font-weight: 500; font-size: 1.05rem; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; }
+        .google-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); box-shadow: 0 0 20px rgba(255,255,255,0.05); }
         .google-btn:active { transform: scale(0.96); }
 
         /* --- Video Player Modal Specifics --- */
-        .video-modal-content { width: 90%; max-width: 900px; padding: 25px; padding-top: 45px; border: 1px solid rgba(255,0,122,0.3); box-shadow: 0 0 50px rgba(255,0,122,0.2);}
+        .video-modal-content { width: 90%; max-width: 900px; padding: 25px; padding-top: 45px; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 14px; overflow: hidden; background: #000; margin-top: 10px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         /* --- Footer --- */
         .site-footer { text-align: center; padding: 35px; margin-top: auto; border-radius: 40px 40px 0 0; width: 100%; font-family: 'Outfit', sans-serif; letter-spacing: 1.5px; border-bottom: none; border-left: none; border-right: none;}
         .site-footer p { color: var(--text-muted); font-size: 0.95rem; margin: 8px 0; font-weight: 300;}
-        
-        /* Colorful Holi Heart in footer */
-        .site-footer .heart { 
-            display: inline-block;
-            animation: pulseHeart 1.5s infinite cubic-bezier(0.4, 0, 0.6, 1), rainbowColor 4s infinite linear;
-        }
-        @keyframes pulseHeart { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
-        @keyframes rainbowColor {
-            0% { color: var(--holi-pink); text-shadow: 0 0 10px var(--holi-pink); }
-            25% { color: var(--holi-cyan); text-shadow: 0 0 10px var(--holi-cyan); }
-            50% { color: var(--holi-yellow); text-shadow: 0 0 10px var(--holi-yellow); }
-            75% { color: var(--holi-green); text-shadow: 0 0 10px var(--holi-green); }
-            100% { color: var(--holi-pink); text-shadow: 0 0 10px var(--holi-pink); }
-        }
+        .site-footer .heart { color: var(--accent-red); animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1); display: inline-block; text-shadow: 0 0 10px rgba(239,68,68,0.5);}
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
         /* --- Responsive Design --- */
         .mobile-nav { display: none; }
@@ -444,7 +362,6 @@
                 justify-content: space-around; padding: 15px 5px;
                 border-radius: 30px 30px 0 0; z-index: 1000;
                 border-bottom: none; border-left: none; border-right: none;
-                background: rgba(2, 4, 10, 0.9);
             }
             .mobile-nav .nav-link { flex-direction: column; font-size: 0.75rem; gap: 6px; }
             .mobile-nav .nav-link i { font-size: 1.4rem; }
@@ -454,7 +371,6 @@
         }
 
         @media (max-width: 600px) {
-            #holiLoader h1 { font-size: 2.2rem; }
             .hero h1 { font-size: 3.2rem; }
             .hero-btns { flex-direction: column; width: 100%; }
             .hero-btns .btn { justify-content: center; width: 100%; }
@@ -470,26 +386,11 @@
 </head>
 <body>
 
-    <!-- Holi Themed Loading Screen -->
-    <div id="holiLoader">
-        <div class="splash-container">
-            <div class="splash splash-1"></div>
-            <div class="splash splash-2"></div>
-            <div class="splash splash-3"></div>
-            <div class="splash splash-4"></div>
-        </div>
-        <h1>HAPPY HOLI!</h1>
-        <p>Bringing colors to your learning...</p>
-    </div>
-
-    <!-- Animated Background (Colorful Gulal Theme) -->
+    <!-- Animated Background -->
     <div class="bg-orbs">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
-        <div class="orb orb-4"></div>
-        <div class="orb orb-5"></div>
-        <div class="orb orb-6"></div>
     </div>
 
     <!-- Toast Notification -->
@@ -500,7 +401,7 @@
     <!-- Custom Confirmation Modal -->
     <div id="confirmModal" class="confirm-overlay">
         <div class="confirm-box liquid-glass">
-            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--holi-pink); margin-bottom: 25px; text-shadow: 0 0 25px rgba(255,0,122,0.4);"></i>
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--accent-red); margin-bottom: 25px; text-shadow: 0 0 25px rgba(239,68,68,0.4);"></i>
             <h2 style="margin-bottom: 12px; font-family: 'Outfit', sans-serif;">Are you sure?</h2>
             <p id="confirmMessage" style="color: var(--text-muted); font-size: 1.05rem; font-weight: 300;">Do you want to delete this?</p>
             <div class="confirm-btns">
@@ -535,7 +436,7 @@
         <section id="home" class="page active">
             <!-- Hero Section -->
             <div class="hero">
-                <div class="badge liquid-glass"><i class="fas fa-paint-brush" style="color:var(--holi-yellow);"></i> A NEW ERA | HAPPY HOLI 🎨</div>
+                <div class="badge liquid-glass">A NEW ERA...</div>
                 <h1>APNA ADDA</h1>
                 <div class="glow-line"></div>
                 <p>A website dedicated to teaching the effective use of AI, enabling learners to leverage Artificial intelligence to acquire valuable, real-world skills for personal and professional growth.</p>
@@ -776,18 +677,6 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // --- HOLI LOADER LOGIC ---
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('holiLoader');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden';
-                    setTimeout(() => loader.remove(), 800);
-                }
-            }, 2500); // Loader displays for 2.5 seconds before fading
-        });
-
         // --- FIREBASE INITIALIZATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyAUHUwmJVnW40FefXCpuxfREsnXNCHHxQU",
